@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Post Viewer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f0f2f5;
+            color: #1c1c1e;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e4e6eb;
+            margin-bottom: 20px;
+        }
+        header h1 { font-size: 24px; color: #1877f2; margin-bottom: 5px; }
+        header p { color: #65676b; font-size: 13px; }
+        .cache-info {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+            display: inline-block;
+            background: #f8f9fa;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .controls .url-input { flex: 1; min-width: 200px; }
+        .controls input {
+            padding: 10px 14px;
+            border: 2px solid #e4e6eb;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+        }
+        .controls input:focus { outline: none; border-color: #1877f2; }
+        .controls select {
+            padding: 10px 14px;
+            border: 2px solid #e4e6eb;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            min-width: 100px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary { background: #1877f2; color: white; }
+        .btn-primary:hover { background: #166fe5; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-refresh { background: #f39c12; color: white; }
+        .btn-refresh:hover { background: #e08e0b; }
+        .btn-download {
+            background: #27ae60;
+            color: white;
+            padding: 10px 24px;
+        }
+        .btn-download:hover { background: #219a52; }
+        .btn-download:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-download .badge {
+            background: rgba(255,255,255,0.3);
+            border-radius: 12px;
+            padding: 0 8px;
+            margin-left: 6px;
+        }
+        .btn-download-single {
+            background: #8e44ad;
+            color: white;
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+        .btn-download-single:hover { background: #7d3c98; }
+        .btn-download-single:disabled { opacity: 0.6; cursor: not-allowed; }
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0 16px 0;
+        }
+        .quick-link {
+            padding: 5px 14px;
+            background: #f0f2f5;
+            border: none;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-link:hover { background: #1877f2; color: white; }
+        .loading { text-align: center; padding: 40px 0; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1877f2;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* POST CARD */
+        .post-card {
+            background: white;
+            border: 1px solid #e4e6eb;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .post-card .caption {
+            padding: 16px 18px 10px 18px;
+            font-size: 15px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .post-card .caption .time {
+            display: block;
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+        }
+        
+        /* IMAGES */
+        .post-card .images {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 0 2px;
+            position: relative;
+        }
+        .post-card .images img {
+            width: 100%;
+            display: block;
+            background: #f0f2f5;
+        }
+        .post-card .images .single-image {
+            max-height: 500px;
+            object-fit: contain;
+            background: #f0f2f5;
+        }
+        .post-card .images .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+        }
+        .post-card .images .grid-2 img { aspect-ratio: 1/1; object-fit: cover; }
+        .post-card .images .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2px;
+        }
+        .post-card .images .grid-3 img { aspect-ratio: 1/1; object-fit: cover; }
+        .post-card .images .grid-3 img:first-child {
+            grid-row: span 2;
+            aspect-ratio: auto;
+            height: 100%;
+        }
+        .post-card .no-image { padding: 0 18px 12px 18px; color: #aaa; font-size: 13px; }
+        
+        /* IMAGE LINKS */
+        .post-card .image-links {
+            padding: 10px 18px 6px 18px;
+            border-top: 1px solid #f0f2f5;
+            margin-top: 4px;
+        }
+        .post-card .image-links .label {
+            font-size: 11px;
+            color: #888;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .post-card .image-links .link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            margin: 2px 0;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+        }
+        .post-card .image-links .link-item .url {
+            color: #1877f2;
+            word-break: break-all;
+            flex: 1;
+            margin-right: 8px;
+            font-size: 10px;
+        }
+        .post-card .image-links .link-item .actions {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .post-card .image-links .link-item .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .post-card .image-links .link-item .actions button:hover {
+            background: #e9ecef;
+        }
+        .post-card .image-links .link-item .actions .download-btn {
+            background: #8e44ad;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .post-card .image-links .link-item .actions .download-btn:hover {
+            background: #7d3c98;
+        }
+        
+        /* POST FOOTER */
+        .post-card .post-footer {
+            padding: 8px 18px 14px 18px;
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #f0f2f5;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 30px 20px;
+            background: #fdf2f2;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+        }
+        .error h3 { color: #e74c3c; margin-bottom: 8px; font-size: 16px; }
+        .error p { color: #555; font-size: 14px; }
+        
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 10px 14px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #555;
+            align-items: center;
+        }
+        .stats .cached { color: #27ae60; }
+        .stats .download-section { margin-left: auto; }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .toast.show { opacity: 1; }
+        
+        .image-count-badge {
+            background: #1877f2;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .post-number {
+            background: #1877f2;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .controls { flex-direction: column; align-items: stretch; }
+            .controls .url-input { min-width: unset; }
+            .post-card .images .grid-2,
+            .post-card .images .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .post-card .images .grid-3 img:first-child { grid-row: auto; }
+            .stats .download-section { margin-left: 0; width: 100%; }
+            .post-card .image-links .link-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .post-card .image-links .link-item .actions {
+                margin-top: 4px;
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📰 Facebook Post Viewer</h1>
+            <p>View posts, download individual images or all as ZIP</p>
+            <span class="cache-info">💾 Cached 24h to save credits</span>
+        </header>
+
+        <div class="controls">
+            <div class="url-input">
+                <input type="text" id="pageUrl" value="https://www.facebook.com/profile.php?id=61590243822144" placeholder="Facebook page URL">
+            </div>
+            <select id="postCount">
+                <option value="3" selected>3 posts</option>
+                <option value="5">5 posts</option>
+                <option value="9">9 posts</option>
+            </select>
+            <button class="btn btn-primary" id="fetchBtn" onclick="fetchPosts()">🔍 View</button>
+            <button class="btn btn-refresh" onclick="fetchPosts(true)">🔄 Refresh</button>
+        </div>
+
+        <div class="quick-links">
+            <button class="quick-link" onclick="setPage('https://www.facebook.com/bbcnews')">BBC</button>
+            <button class="quick-link" onclick="setPage('https://www.facebook.com/nasa')">NASA</button>
+            <button class="quick-link" onclick="setPage('https://www.facebook.com/nike')">Nike</button>
+            <button class="quick-link" onclick="setPage('https://www.facebook.com/natgeo')">NatGeo</button>
+            <button class="quick-link" onclick="setPage('https://www.facebook.com/nytimes')">NYT</button>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading posts...</p>
+        </div>
+
+        <div id="results"></div>
+
+        <div class="footer">SocialAPIs.io · Posts cached for 24 hours</div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast">✅ Copied!</div>
+
+    <script>
+        let currentPosts = [];
+        let isFetching = false;
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        async function fetchPosts(forceRefresh = false) {
+            if (isFetching) return;
+            
+            const pageUrl = document.getElementById('pageUrl').value.trim();
+            const postCount = parseInt(document.getElementById('postCount').value);
+            
+            if (!pageUrl) {
+                alert('Please enter a Facebook page URL');
+                return;
+            }
+            
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const fetchBtn = document.getElementById('fetchBtn');
+            
+            loading.style.display = 'block';
+            results.innerHTML = '';
+            fetchBtn.disabled = true;
+            isFetching = true;
+            
+            try {
+                const response = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        page_url: pageUrl,
+                        limit: postCount,
+                        force_refresh: forceRefresh
+                    })
+                });
+                
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                fetchBtn.disabled = false;
+                isFetching = false;
+                
+                if (data.success) {
+                    currentPosts = data.posts;
+                    console.log('✅ Posts loaded:', currentPosts.length);
+                    console.log('📸 Images per post:', currentPosts.map(p => p.images ? p.images.length : 0));
+                    displayPosts(data);
+                } else {
+                    results.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Could not load posts</h3>
+                            <p>${data.error || 'Unknown error'}</p>
+                            <p style="margin-top:8px;font-size:12px;color:#888;">Try: nasa, bbcnews, or natgeo</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                fetchBtn.disabled = false;
+                isFetching = false;
+                results.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Connection error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function downloadSingleImage(imageUrl, filename) {
+            if (!imageUrl) {
+                showToast('❌ No image URL provided');
+                return;
+            }
+
+            showToast('⏳ Downloading image...');
+            
+            try {
+                const response = await fetch('/api/download-single-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image_url: imageUrl,
+                        filename: filename
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Download failed: ${response.status} - ${errorText}`);
+                }
+
+                // Get the image file
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // Get filename from content-disposition or generate one
+                const contentDisposition = response.headers.get('content-disposition');
+                let downloadFilename = `${filename}.jpg`;
+                if (contentDisposition) {
+                    const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                    if (match && match[1]) {
+                        downloadFilename = match[1].replace(/['"]/g, '');
+                    }
+                }
+                
+                a.download = downloadFilename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+
+                showToast(`✅ Downloaded: ${downloadFilename}`);
+            } catch (error) {
+                console.error('❌ Download error:', error);
+                showToast(`❌ Download failed: ${error.message}`);
+            }
+        }
+
+        async function downloadAllImages() {
+            if (!currentPosts || currentPosts.length === 0) {
+                showToast('❌ No posts to download');
+                return;
+            }
+
+            // Count total images
+            const totalImages = currentPosts.reduce((sum, post) => sum + (post.images ? post.images.length : 0), 0);
+            
+            console.log('📥 Downloading:', totalImages, 'images');
+            console.log('📦 Posts:', currentPosts);
+            
+            if (totalImages === 0) {
+                showToast('❌ No images found in these posts');
+                return;
+            }
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            if (!downloadBtn) {
+                showToast('❌ Download button not found');
+                return;
+            }
+            
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = '⏳ Downloading...';
+
+            try {
+                // Get page name from URL
+                const pageUrl = document.getElementById('pageUrl').value.trim();
+                const pageName = pageUrl.replace(/^https?:\/\/(www\.)?facebook\.com\//, '').replace(/[^a-zA-Z0-9]/g, '_') || 'facebook';
+
+                const response = await fetch('/api/download-images', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        posts: currentPosts,
+                        page_name: pageName
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Download failed: ${response.status} - ${errorText}`);
+                }
+
+                // Get the ZIP file
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // Get filename from content-disposition or generate one
+                const contentDisposition = response.headers.get('content-disposition');
+                let filename = `${pageName}_images.zip`;
+                if (contentDisposition) {
+                    const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                    if (match && match[1]) {
+                        filename = match[1].replace(/['"]/g, '');
+                    }
+                }
+                
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+
+                showToast(`✅ Downloaded ${totalImages} images!`);
+            } catch (error) {
+                console.error('❌ Download error:', error);
+                showToast(`❌ Download failed: ${error.message}`);
+            } finally {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = `📥 Download All Images <span class="badge">${totalImages}</span>`;
+            }
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('✅ Copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const input = document.createElement('input');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            try {
+                document.execCommand('copy');
+                showToast('✅ Copied to clipboard!');
+            } catch (e) {
+                showToast('❌ Failed to copy');
+            }
+            document.body.removeChild(input);
+        }
+
+        function displayPosts(data) {
+            const results = document.getElementById('results');
+            const { posts, cached } = data;
+            
+            // Count total images
+            const totalImages = posts.reduce((sum, post) => sum + (post.images ? post.images.length : 0), 0);
+            
+            let html = `
+                <div class="stats">
+                    <span>📊 ${posts.length} posts</span>
+                    <span>🖼️ ${totalImages} images</span>
+                    ${cached ? '<span class="cached">📦 Cached</span>' : ''}
+                    <span class="download-section">
+                        <button class="btn btn-download" id="downloadBtn" onclick="downloadAllImages()" ${totalImages === 0 ? 'disabled' : ''}>
+                            📥 Download All Images <span class="badge">${totalImages}</span>
+                        </button>
+                    </span>
+                </div>
+            `;
+            
+            if (!posts || posts.length === 0) {
+                html += `<div class="error"><h3>📭 No posts found</h3></div>`;
+                results.innerHTML = html;
+                return;
+            }
+            
+            posts.forEach((post, index) => {
+                const images = post.images || [];
+                const imageCount = images.length;
+                const postNumber = index + 1;
+                
+                // Build image grid
+                let imagesHtml = '';
+                if (imageCount === 0) {
+                    imagesHtml = `<div class="no-image">📷 No images</div>`;
+                } else if (imageCount === 1) {
+                    imagesHtml = `
+                        <div class="images">
+                            <img src="${images[0]}" alt="Post image" class="single-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>❌ Image failed to load</div>'">
+                        </div>
+                    `;
+                } else if (imageCount === 2) {
+                    imagesHtml = `
+                        <div class="images">
+                            <div class="grid-2">
+                                ${images.map(img => `<img src="${img}" alt="Post image" loading="lazy" onerror="this.style.display='none'">`).join('')}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    imagesHtml = `
+                        <div class="images">
+                            <div class="grid-3">
+                                ${images.map(img => `<img src="${img}" alt="Post image" loading="lazy" onerror="this.style.display='none'">`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Build image links with download buttons
+                let linksHtml = '';
+                if (imageCount > 0) {
+                    linksHtml = `
+                        <div class="image-links">
+                            <div class="label">🖼️ Image URLs (${imageCount})</div>
+                            ${images.map((img, idx) => {
+                                const imgNumber = idx + 1;
+                                const filename = `post_${postNumber}_image_${imgNumber}`;
+                                return `
+                                    <div class="link-item">
+                                        <span class="url">${img}</span>
+                                        <span class="actions">
+                                            <button onclick="downloadSingleImage('${img}', '${filename}')" title="Download this image" class="download-btn">⬇️ Download</button>
+                                            <button onclick="copyToClipboard('${img}')" title="Copy URL">📋</button>
+                                            <button onclick="window.open('${img}', '_blank')" title="Open in new tab">🔗</button>
+                                        </span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                }
+                
+                html += `
+                    <div class="post-card" id="post-${index}">
+                        <div class="caption">
+                            <span class="post-number">Post ${postNumber}</span>
+                            ${post.text || 'No caption'}
+                            <span class="time">${post.time || ''}</span>
+                        </div>
+                        ${imagesHtml}
+                        ${linksHtml}
+                        <div class="post-footer">
+                            <span>❤️ ${post.total_reactions || 0}</span>
+                            <span>💬 ${post.comments || 0}</span>
+                            <span>🔄 ${post.shares || 0}</span>
+                            <span>📎 ${imageCount} image${imageCount !== 1 ? 's' : ''}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            results.innerHTML = html;
+        }
+
+        function setPage(url) {
+            document.getElementById('pageUrl').value = url;
+            fetchPosts(false);
+        }
+
+        // Auto-load on start
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => fetchPosts(false), 400);
+        });
+
+        // Enter key support
+        document.getElementById('pageUrl').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fetchPosts(false);
+        });
+    </script>
+</body>
+</html>
