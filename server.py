@@ -561,9 +561,15 @@ def clear_cache():
         return jsonify({"success": True, "message": "Cache cleared"})
     return jsonify({"success": True, "message": "No cache to clear"})
 
+@app.route('/health')
+def health():
+    return jsonify({
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "version": "1.0.0"
+    })
+
 if __name__ == '__main__':
-    print("🚀 Starting Facebook Post Viewer")
-    print("=" * 50)
-    print(f"💾 Cache file: {CACHE_FILE}")
-    print("=" * 50)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
