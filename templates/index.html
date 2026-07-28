@@ -5,739 +5,1618 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Post Viewer</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #f0f2f5;
-            color: #1c1c1e;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f6f8;
+            color: #1a1a2e;
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+        
         .container {
-            max-width: 800px;
+            max-width: 820px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-            padding: 25px;
         }
-        header {
-            text-align: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e4e6eb;
-            margin-bottom: 20px;
+        
+        /* ===== HEADER ===== */
+        .header {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
-        header h1 { font-size: 24px; color: #1877f2; margin-bottom: 5px; }
-        header p { color: #65676b; font-size: 13px; }
-        .cache-info {
-            font-size: 11px;
-            color: #888;
-            margin-top: 6px;
-            display: inline-block;
-            background: #f8f9fa;
+        
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header-brand .logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #1877f2, #0d65d9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .header-brand h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+            letter-spacing: -0.3px;
+        }
+        
+        .header-brand h1 span {
+            color: #1877f2;
+        }
+        
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        .header-meta .badge {
+            background: #eef2f7;
             padding: 4px 12px;
-            border-radius: 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #4b5563;
         }
+        
+        .header-meta .time-display {
+            color: #6b7280;
+            font-size: 12px;
+        }
+        
+        /* ===== CONTROLS ===== */
         .controls {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        
+        .controls-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
             align-items: center;
         }
-        .controls .url-input { flex: 1; min-width: 200px; }
-        .controls input {
-            padding: 10px 14px;
-            border: 2px solid #e4e6eb;
-            border-radius: 8px;
-            font-size: 14px;
+        
+        .controls-row .url-field {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .controls-row .url-field input {
             width: 100%;
-        }
-        .controls input:focus { outline: none; border-color: #1877f2; }
-        .controls select {
-            padding: 10px 14px;
-            border: 2px solid #e4e6eb;
-            border-radius: 8px;
+            padding: 10px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
             font-size: 14px;
-            background: white;
-            min-width: 100px;
+            font-family: inherit;
+            color: #1a1a2e;
+            background: #fafbfc;
+            transition: all 0.2s ease;
+            outline: none;
         }
+        
+        .controls-row .url-field input:focus {
+            border-color: #1877f2;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+        
+        .controls-row .url-field input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .controls-row select {
+            padding: 10px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #1a1a2e;
+            background: #fafbfc;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 110px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+        
+        .controls-row select:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+        
+        .controls-row .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
         .btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: #1877f2;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0d65d9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* ===== SELECTED PROFILE ===== */
+        .selected-profile {
+            display: none;
+            background: #f0f7ff;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-top: 14px;
+            border: 1px solid rgba(24, 119, 242, 0.15);
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .selected-profile.active {
+            display: flex;
+        }
+        
+        .selected-profile .label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .selected-profile .name {
+            font-weight: 600;
+            color: #1877f2;
+            font-size: 14px;
+        }
+        
+        .selected-profile .url {
+            font-size: 12px;
+            color: #6b7280;
+            word-break: break-all;
+        }
+        
+        /* ===== SPECIAL PROFILES ===== */
+        .special-section {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        
+        .special-section .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .special-section .section-label .dot {
+            width: 6px;
+            height: 6px;
+            background: #f59e0b;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .special-profiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .special-profile-btn {
+            padding: 6px 16px;
+            background: #fef9e7;
+            border: 1.5px solid #fde68a;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #92400e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .special-profile-btn:hover {
+            background: #fde68a;
+            transform: translateY(-1px);
+        }
+        
+        .special-profile-btn.active {
+            background: #f59e0b;
+            color: white;
+            border-color: #d97706;
+        }
+        
+        .special-profile-btn .remove {
+            background: none;
+            border: none;
+            color: #92400e;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            font-family: inherit;
+            margin-left: 4px;
+        }
+        
+        .special-profile-btn .remove:hover {
+            opacity: 1;
+        }
+        
+        /* ===== QUICK LINKS ===== */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .quick-link {
+            padding: 5px 14px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .quick-link:hover {
+            background: #e5e7eb;
+        }
+        
+        .quick-link.active {
+            background: #1877f2;
+            color: white;
+        }
+        
+        /* ===== LOADING ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .loading .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #e5e7eb;
+            border-top-color: #1877f2;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 14px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        /* ===== RESULTS ===== */
+        .results {
+            display: none;
+        }
+        
+        .results.active {
+            display: block;
+        }
+        
+        /* ===== STATS BAR ===== */
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 20px;
+            padding: 14px 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        
+        .stats .stat-item {
+            font-size: 13px;
+            color: #4b5563;
+        }
+        
+        .stats .stat-item strong {
+            color: #1a1a2e;
+            font-weight: 600;
+        }
+        
+        .stats .stat-badge {
+            background: #eef2f7;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+        
+        .stats .stat-badge.latest {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .stats .spacer {
+            flex: 1;
+        }
+        
+        .stats .download-all {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
-        .btn-primary { background: #1877f2; color: white; }
-        .btn-primary:hover { background: #166fe5; }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-refresh { background: #f39c12; color: white; }
-        .btn-refresh:hover { background: #e08e0b; }
-        .btn-download {
-            background: #27ae60;
-            color: white;
-            padding: 10px 24px;
-        }
-        .btn-download:hover { background: #219a52; }
-        .btn-download:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-download .badge {
-            background: rgba(255,255,255,0.3);
-            border-radius: 12px;
-            padding: 0 8px;
-            margin-left: 6px;
-        }
-        .btn-download-single {
-            background: #8e44ad;
-            color: white;
-            padding: 4px 12px;
-            font-size: 12px;
-        }
-        .btn-download-single:hover { background: #7d3c98; }
-        .btn-download-single:disabled { opacity: 0.6; cursor: not-allowed; }
-        .quick-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 12px 0 16px 0;
-        }
-        .quick-link {
-            padding: 5px 14px;
-            background: #f0f2f5;
-            border: none;
-            border-radius: 16px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .quick-link:hover { background: #1877f2; color: white; }
-        .loading { text-align: center; padding: 40px 0; }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #1877f2;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 12px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* POST CARD */
-        .post-card {
-            background: white;
-            border: 1px solid #e4e6eb;
+        .stats .download-all:hover {
+            background: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        }
+        
+        .stats .download-all:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .stats .download-all .count {
+            background: rgba(255,255,255,0.2);
+            padding: 0 8px;
             border-radius: 10px;
+            font-size: 11px;
+        }
+        
+        /* ===== POST CARD ===== */
+        .post-card {
+            background: #ffffff;
+            border-radius: 16px;
             margin-bottom: 20px;
             overflow: hidden;
-        }
-        .post-card .caption {
-            padding: 16px 18px 10px 18px;
-            font-size: 15px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .post-card .caption .time {
-            display: block;
-            font-size: 11px;
-            color: #888;
-            margin-top: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.2s ease;
         }
         
-        /* IMAGES */
-        .post-card .images {
+        .post-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .post-card .post-header {
+            padding: 18px 22px 12px 22px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            padding: 0 2px;
-            position: relative;
+            gap: 6px;
         }
-        .post-card .images img {
+        
+        .post-card .post-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .post-card .post-number {
+            background: #f3f4f6;
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .post-card .post-number.recent {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .post-card .post-time {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+        
+        .post-card .post-time .absolute {
+            color: #6b7280;
+        }
+        
+        .post-card .post-time .absolute .tz {
+            background: #eef2f7;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-left: 2px;
+        }
+        
+        .post-card .post-time .relative {
+            color: #059669;
+            font-weight: 500;
+        }
+        
+        .post-card .post-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #1a1a2e;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            padding-top: 4px;
+        }
+        
+        .post-card .post-text:empty {
+            display: none;
+        }
+        
+        /* ===== POST IMAGES ===== */
+        .post-card .post-images {
+            padding: 0 4px 4px 4px;
+        }
+        
+        .post-card .post-images img {
             width: 100%;
             display: block;
-            background: #f0f2f5;
+            background: #f3f4f6;
         }
-        .post-card .images .single-image {
-            max-height: 500px;
+        
+        .post-card .post-images .single {
+            max-height: 520px;
             object-fit: contain;
-            background: #f0f2f5;
+            border-radius: 8px;
         }
-        .post-card .images .grid-2 {
+        
+        .post-card .post-images .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2px;
+            gap: 3px;
         }
-        .post-card .images .grid-2 img { aspect-ratio: 1/1; object-fit: cover; }
-        .post-card .images .grid-3 {
+        
+        .post-card .post-images .grid-2 img {
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        .post-card .post-images .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 2px;
+            gap: 3px;
         }
-        .post-card .images .grid-3 img { aspect-ratio: 1/1; object-fit: cover; }
-        .post-card .images .grid-3 img:first-child {
+        
+        .post-card .post-images .grid-3 img {
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        
+        .post-card .post-images .grid-3 img:first-child {
             grid-row: span 2;
             aspect-ratio: auto;
             height: 100%;
         }
-        .post-card .no-image { padding: 0 18px 12px 18px; color: #aaa; font-size: 13px; }
         
-        /* IMAGE LINKS */
-        .post-card .image-links {
-            padding: 10px 18px 6px 18px;
-            border-top: 1px solid #f0f2f5;
-            margin-top: 4px;
+        .post-card .no-image {
+            padding: 0 22px 14px 22px;
+            color: #9ca3af;
+            font-size: 13px;
         }
+        
+        /* ===== IMAGE LINKS ===== */
+        .post-card .image-links {
+            padding: 12px 22px 8px 22px;
+            border-top: 1px solid #f3f4f6;
+        }
+        
         .post-card .image-links .label {
             font-size: 11px;
-            color: #888;
             font-weight: 600;
+            color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
+        
         .post-card .image-links .link-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 6px 8px;
+            justify-content: space-between;
+            padding: 5px 8px;
             margin: 2px 0;
-            background: #f8f9fa;
-            border-radius: 4px;
-            font-size: 11px;
-            font-family: 'Courier New', monospace;
+            background: #fafbfc;
+            border-radius: 6px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
+        
         .post-card .image-links .link-item .url {
+            font-size: 11px;
             color: #1877f2;
             word-break: break-all;
+            font-family: 'SF Mono', 'Courier New', monospace;
             flex: 1;
-            margin-right: 8px;
-            font-size: 10px;
+            min-width: 100px;
         }
+        
         .post-card .image-links .link-item .actions {
             display: flex;
             gap: 4px;
-            flex-wrap: wrap;
+            flex-shrink: 0;
         }
+        
         .post-card .image-links .link-item .actions button {
             background: none;
             border: none;
             cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
             font-size: 13px;
-            padding: 2px 6px;
-            border-radius: 4px;
             transition: background 0.2s;
+            font-family: inherit;
+            color: #4b5563;
         }
+        
         .post-card .image-links .link-item .actions button:hover {
-            background: #e9ecef;
+            background: #e5e7eb;
         }
+        
         .post-card .image-links .link-item .actions .download-btn {
-            background: #8e44ad;
+            background: #8b5cf6;
             color: white;
-            padding: 2px 10px;
-            border-radius: 4px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 500;
+            padding: 3px 12px;
+            border-radius: 4px;
         }
+        
         .post-card .image-links .link-item .actions .download-btn:hover {
-            background: #7d3c98;
+            background: #7c3aed;
         }
         
-        /* POST FOOTER */
+        /* ===== POST FOOTER ===== */
         .post-card .post-footer {
-            padding: 8px 18px 14px 18px;
-            font-size: 12px;
-            color: #888;
-            border-top: 1px solid #f0f2f5;
+            padding: 10px 22px 16px 22px;
+            border-top: 1px solid #f3f4f6;
             display: flex;
-            gap: 16px;
+            gap: 18px;
             flex-wrap: wrap;
+            font-size: 13px;
+            color: #6b7280;
         }
         
+        .post-card .post-footer span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .post-card .post-footer .reaction {
+            font-weight: 500;
+            color: #1a1a2e;
+        }
+        
+        /* ===== ERROR ===== */
         .error {
             text-align: center;
-            padding: 30px 20px;
-            background: #fdf2f2;
-            border-radius: 8px;
-            border: 1px solid #f5c6cb;
+            padding: 48px 24px;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #fecaca;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
         }
-        .error h3 { color: #e74c3c; margin-bottom: 8px; font-size: 16px; }
-        .error p { color: #555; font-size: 14px; }
         
-        .stats {
+        .error h3 {
+            color: #dc2626;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .error p {
+            color: #6b7280;
+            font-size: 14px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
             display: flex;
+        }
+        
+        .modal {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 680px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        
+        .modal-header .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+        
+        .modal-header .close:hover {
+            color: #1a1a2e;
+            background: #f3f4f6;
+        }
+        
+        .modal .search-input {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+            background: #fafbfc;
+        }
+        
+        .modal .search-input:focus {
+            border-color: #1877f2;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+        
+        .modal .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .modal .profile-item {
+            padding: 16px 12px;
+            background: #fafbfc;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            font-family: inherit;
+        }
+        
+        .modal .profile-item:hover {
+            background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+        
+        .modal .profile-item.selected {
+            border-color: #1877f2;
+            background: #eff6ff;
+        }
+        
+        .modal .profile-item.special {
+            border-color: #fde68a;
+            background: #fffbeb;
+        }
+        
+        .modal .profile-item .name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        
+        .modal .profile-item .category {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .modal .profile-item .special-tag {
+            font-size: 10px;
+            color: #d97706;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        
+        .modal .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            padding: 10px 14px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 12px;
-            color: #555;
-            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #f3f4f6;
         }
-        .stats .cached { color: #27ae60; }
-        .stats .download-section { margin-left: auto; }
         
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 10px 24px;
+        .modal .selected-info {
+            font-size: 13px;
+            color: #4b5563;
+        }
+        
+        .modal .selected-info strong {
+            color: #1877f2;
+        }
+        
+        .modal .modal-actions .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* ===== ADD PROFILE SECTION ===== */
+        .add-profile-section {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fafbfc;
+            border-radius: 12px;
+            border: 1.5px dashed #d1d5db;
+        }
+        
+        .add-profile-section .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 10px;
+        }
+        
+        .add-profile-section .form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .add-profile-section .form input {
+            flex: 1;
+            min-width: 120px;
+            padding: 8px 14px;
+            border: 1.5px solid #e5e7eb;
             border-radius: 8px;
             font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            background: #ffffff;
+            transition: all 0.2s;
+        }
+        
+        .add-profile-section .form input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+        
+        .add-profile-section .form .btn-add {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .add-profile-section .form .btn-add:hover {
+            background: #047857;
+        }
+        
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1a1a2e;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
-            z-index: 999;
-        }
-        .toast.show { opacity: 1; }
-        
-        .image-count-badge {
-            background: #1877f2;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .post-number {
-            background: #1877f2;
-            color: white;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-right: 8px;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-family: inherit;
         }
         
-        @media (max-width: 600px) {
-            .container { padding: 15px; }
-            .controls { flex-direction: column; align-items: stretch; }
-            .controls .url-input { min-width: unset; }
-            .post-card .images .grid-2,
-            .post-card .images .grid-3 {
-                grid-template-columns: 1fr 1fr;
-            }
-            .post-card .images .grid-3 img:first-child { grid-row: auto; }
-            .stats .download-section { margin-left: 0; width: 100%; }
-            .post-card .image-links .link-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .post-card .image-links .link-item .actions {
-                margin-top: 4px;
-                width: 100%;
-                justify-content: flex-start;
-            }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .toast.success {
+            background: #059669;
+        }
+        
+        .toast.error {
+            background: #dc2626;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            
+            .header { padding: 20px; }
+            .header-brand h1 { font-size: 17px; }
+            .header-meta { font-size: 11px; }
+            .header-meta .badge { display: none; }
+            
+            .controls { padding: 16px; }
+            .controls-row { flex-direction: column; }
+            .controls-row .url-field { width: 100%; }
+            .controls-row .btn-group { width: 100%; }
+            .controls-row .btn-group .btn { flex: 1; justify-content: center; }
+            
+            .modal { padding: 20px; }
+            .modal .profile-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            
+            .stats { flex-direction: column; align-items: stretch; }
+            .stats .spacer { display: none; }
+            .stats .download-all { justify-content: center; }
+            
+            .post-card .post-header { padding: 14px 16px 10px 16px; }
+            .post-card .post-text { font-size: 14px; }
+            .post-card .image-links { padding: 10px 16px 6px 16px; }
+            .post-card .post-footer { padding: 8px 16px 12px 16px; gap: 12px; font-size: 12px; }
+            .post-card .image-links .link-item { flex-direction: column; align-items: flex-start; }
+            .post-card .image-links .link-item .actions { width: 100%; justify-content: flex-start; }
+            
+            .selected-profile { flex-direction: column; align-items: flex-start; }
+            
+            .add-profile-section .form { flex-direction: column; }
+            .add-profile-section .form input { width: 100%; }
+        }
+        
+        @media (max-width: 480px) {
+            .header { padding: 16px; }
+            .header-brand .logo { width: 30px; height: 30px; font-size: 14px; }
+            .header-brand h1 { font-size: 15px; }
+            
+            .post-card .post-images .grid-2 { grid-template-columns: 1fr; }
+            .post-card .post-images .grid-3 { grid-template-columns: 1fr; }
+            .post-card .post-images .grid-3 img:first-child { grid-row: auto; }
+            
+            .post-card .post-top { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .post-card .post-time { font-size: 12px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>📰 Facebook Post Viewer</h1>
-            <p>View posts, download individual images or all as ZIP</p>
-            <span class="cache-info">💾 Cached 24h to save credits</span>
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <div class="header-top">
+                <div class="header-brand">
+                    <div class="logo">F</div>
+                    <h1>Post<span>View</span></h1>
+                </div>
+                <div class="header-meta">
+                    <span class="badge">⚡ Fresh</span>
+                    <span class="time-display" id="headerTime">—</span>
+                </div>
+            </div>
         </header>
 
+        <!-- ===== CONTROLS ===== -->
         <div class="controls">
-            <div class="url-input">
-                <input type="text" id="pageUrl" value="https://www.facebook.com/profile.php?id=61590243822144" placeholder="Facebook page URL">
+            <div class="controls-row">
+                <div class="url-field">
+                    <input type="text" id="pageUrl" placeholder="Enter Facebook page or profile URL…">
+                </div>
+                <select id="postCount">
+                    <option value="1">1 post</option>
+                    <option value="3" selected>3 posts</option>
+                    <option value="5">5 posts</option>
+                    <option value="9">9 posts</option>
+                </select>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="loadBtn" onclick="fetchPosts()">Load</button>
+                    <button class="btn btn-secondary" onclick="openProfilesModal()">Profiles</button>
+                </div>
             </div>
-            <select id="postCount">
-                <option value="3" selected>3 posts</option>
-                <option value="5">5 posts</option>
-                <option value="9">9 posts</option>
-            </select>
-            <button class="btn btn-primary" id="fetchBtn" onclick="fetchPosts()">🔍 View</button>
-            <button class="btn btn-refresh" onclick="fetchPosts(true)">🔄 Refresh</button>
+
+            <!-- Selected Profile -->
+            <div class="selected-profile" id="selectedDisplay">
+                <span class="label">Selected:</span>
+                <span class="name" id="selectedName">—</span>
+                <span class="url" id="selectedUrl"></span>
+            </div>
         </div>
 
-        <div class="quick-links">
-            <button class="quick-link" onclick="setPage('https://www.facebook.com/bbcnews')">BBC</button>
-            <button class="quick-link" onclick="setPage('https://www.facebook.com/nasa')">NASA</button>
-            <button class="quick-link" onclick="setPage('https://www.facebook.com/nike')">Nike</button>
-            <button class="quick-link" onclick="setPage('https://www.facebook.com/natgeo')">NatGeo</button>
-            <button class="quick-link" onclick="setPage('https://www.facebook.com/nytimes')">NYT</button>
+        <!-- ===== SPECIAL PROFILES ===== -->
+        <div class="special-section" id="specialSection">
+            <div class="section-label">
+                <span class="dot"></span>
+                Saved Profiles
+            </div>
+            <div class="special-profiles" id="specialProfiles">
+                <span style="font-size:13px;color:#9ca3af;">No saved profiles yet. Click "Profiles" to add.</span>
+            </div>
         </div>
 
-        <div id="loading" class="loading" style="display: none;">
+        <!-- ===== QUICK LINKS ===== -->
+        <div class="quick-links" id="quickLinks"></div>
+
+        <!-- ===== LOADING ===== -->
+        <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Loading posts...</p>
+            <p>Fetching posts…</p>
         </div>
 
-        <div id="results"></div>
+        <!-- ===== RESULTS ===== -->
+        <div class="results" id="results"></div>
 
-        <div class="footer">SocialAPIs.io · Posts cached for 24 hours</div>
     </div>
 
-    <!-- Toast notification -->
-    <div id="toast" class="toast">✅ Copied!</div>
+    <!-- ===== PROFILES MODAL ===== -->
+    <div class="modal-overlay" id="profilesModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Select Profile</h2>
+                <button class="close" onclick="closeProfilesModal()">✕</button>
+            </div>
+            <input type="text" class="search-input" id="profileSearch" placeholder="Search profiles…" oninput="filterProfiles()">
+            <div class="profile-grid" id="profileGrid"></div>
+
+            <!-- Add Profile -->
+            <div class="add-profile-section">
+                <div class="title">➕ Add saved profile</div>
+                <div class="form">
+                    <input type="text" id="newProfileName" placeholder="Name (e.g. John Doe)">
+                    <input type="text" id="newProfileUrl" placeholder="Facebook URL">
+                    <button class="btn-add" onclick="addSpecialProfile()">Add</button>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <span class="selected-info" id="selectedCount">No profile selected</span>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="closeProfilesModal()">Close</button>
+                    <button class="btn btn-primary" onclick="selectAndClose()">Select &amp; Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
 
     <script>
+        // ============================================================
+        // STATE
+        // ============================================================
         let currentPosts = [];
         let isFetching = false;
+        let profiles = [];
+        let specialProfiles = [];
+        let selectedProfile = null;
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const $ = id => document.getElementById(id);
+        const pageUrl = $('pageUrl');
+        const postCount = $('postCount');
+        const loadBtn = $('loadBtn');
+        const loading = $('loading');
+        const results = $('results');
+        const toast = $('toast');
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(message, type = '') {
             toast.textContent = message;
-            toast.classList.add('show');
-            clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2000);
+            toast.className = 'toast show ' + type;
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        async function fetchPosts(forceRefresh = false) {
-            if (isFetching) return;
-            
-            const pageUrl = document.getElementById('pageUrl').value.trim();
-            const postCount = parseInt(document.getElementById('postCount').value);
-            
-            if (!pageUrl) {
-                alert('Please enter a Facebook page URL');
+        // ============================================================
+        // TIME
+        // ============================================================
+        function updateHeaderTime() {
+            const now = new Date();
+            const opts = { timeZone: 'Africa/Nairobi', hour: '2-digit', minute: '2-digit', hour12: true };
+            const time = now.toLocaleTimeString('en-US', opts);
+            const date = now.toLocaleDateString('en-US', { timeZone: 'Africa/Nairobi', month: 'short', day: 'numeric', year: 'numeric' });
+            $('headerTime').textContent = time + ' EAT · ' + date;
+        }
+        updateHeaderTime();
+        setInterval(updateHeaderTime, 30000);
+
+        // ============================================================
+        // PROFILES API
+        // ============================================================
+        async function loadProfiles() {
+            try {
+                const res = await fetch('/api/profiles');
+                const data = await res.json();
+                if (data.success) {
+                    profiles = data.profiles;
+                    specialProfiles = data.special_profiles;
+                    renderSpecialProfiles();
+                    renderQuickLinks();
+                    renderProfileGrid();
+                    updateSelectedDisplay();
+                }
+            } catch (e) {
+                console.error('Failed to load profiles:', e);
+            }
+        }
+
+        function renderSpecialProfiles() {
+            const container = $('specialProfiles');
+            if (!specialProfiles.length) {
+                container.innerHTML = '<span style="font-size:13px;color:#9ca3af;">No saved profiles yet. Click "Profiles" to add.</span>';
                 return;
             }
-            
-            const loading = document.getElementById('loading');
-            const results = document.getElementById('results');
-            const fetchBtn = document.getElementById('fetchBtn');
-            
-            loading.style.display = 'block';
-            results.innerHTML = '';
-            fetchBtn.disabled = true;
-            isFetching = true;
-            
+            container.innerHTML = specialProfiles.map(p => `
+                <button class="special-profile-btn ${selectedProfile?.id === p.id ? 'active' : ''}"
+                        onclick="selectAndSetProfile('${p.id}')">
+                    ${p.name}
+                    <span class="remove" onclick="event.stopPropagation(); removeSpecialProfile('${p.id}')">×</span>
+                </button>
+            `).join('');
+        }
+
+        function renderQuickLinks() {
+            const container = $('quickLinks');
+            const all = [...specialProfiles, ...profiles.slice(0, 8)];
+            container.innerHTML = all.map(p => `
+                <button class="quick-link ${selectedProfile?.id === p.id ? 'active' : ''}"
+                        onclick="selectAndSetProfile('${p.id}')">
+                    ${p.name}
+                </button>
+            `).join('');
+        }
+
+        function renderProfileGrid() {
+            const grid = $('profileGrid');
+            const query = $('profileSearch').value.toLowerCase();
+            const all = [...specialProfiles, ...profiles];
+            const filtered = all.filter(p =>
+                p.name.toLowerCase().includes(query) ||
+                p.category.toLowerCase().includes(query)
+            );
+            grid.innerHTML = filtered.map(p => {
+                const isSpecial = specialProfiles.some(s => s.id === p.id);
+                const isSelected = selectedProfile?.id === p.id;
+                return `
+                    <div class="profile-item ${isSpecial ? 'special' : ''} ${isSelected ? 'selected' : ''}"
+                         onclick="selectAndSetProfile('${p.id}')">
+                        <div class="name">${p.name}</div>
+                        <div class="category">${p.category}</div>
+                        ${isSpecial ? '<div class="special-tag">⭐ Saved</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+            updateSelectedCount();
+        }
+
+        function filterProfiles() { renderProfileGrid(); }
+
+        function selectAndSetProfile(id) {
+            const all = [...specialProfiles, ...profiles];
+            const p = all.find(x => x.id === id);
+            if (p) {
+                selectedProfile = p;
+                pageUrl.value = p.url;
+                renderSpecialProfiles();
+                renderQuickLinks();
+                renderProfileGrid();
+                updateSelectedDisplay();
+                showToast(`Selected: ${p.name}`, 'success');
+            }
+        }
+
+        function updateSelectedDisplay() {
+            const el = $('selectedDisplay');
+            if (selectedProfile) {
+                el.classList.add('active');
+                $('selectedName').textContent = selectedProfile.name;
+                $('selectedUrl').textContent = selectedProfile.url;
+            } else {
+                el.classList.remove('active');
+            }
+        }
+
+        function updateSelectedCount() {
+            $('selectedCount').textContent = selectedProfile
+                ? `✅ ${selectedProfile.name} selected`
+                : 'No profile selected';
+        }
+
+        function selectAndClose() {
+            if (selectedProfile) {
+                closeProfilesModal();
+                showToast(`Selected: ${selectedProfile.name}`, 'success');
+            } else {
+                showToast('Please select a profile first', 'error');
+            }
+        }
+
+        // ============================================================
+        // SPECIAL PROFILES CRUD
+        // ============================================================
+        async function addSpecialProfile() {
+            const name = $('newProfileName').value.trim();
+            const url = $('newProfileUrl').value.trim();
+            if (!name || !url) {
+                showToast('Please enter both name and URL', 'error');
+                return;
+            }
             try {
-                const response = await fetch('/api/posts', {
+                const res = await fetch('/api/special-profiles', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        page_url: pageUrl,
-                        limit: postCount,
-                        force_refresh: forceRefresh
-                    })
+                    body: JSON.stringify({ id: 'sp_' + Date.now(), name, url })
                 });
-                
-                const data = await response.json();
-                
-                loading.style.display = 'none';
-                fetchBtn.disabled = false;
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Profile added ✓', 'success');
+                    $('newProfileName').value = '';
+                    $('newProfileUrl').value = '';
+                    await loadProfiles();
+                } else {
+                    showToast(data.error || 'Failed to add', 'error');
+                }
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+
+        async function removeSpecialProfile(id) {
+            if (!confirm('Remove this saved profile?')) return;
+            try {
+                const res = await fetch(`/api/special-profiles/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    if (selectedProfile?.id === id) {
+                        selectedProfile = null;
+                        pageUrl.value = '';
+                    }
+                    await loadProfiles();
+                    showToast('Profile removed', 'success');
+                }
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+
+        // ============================================================
+        // MODAL
+        // ============================================================
+        function openProfilesModal() {
+            $('profilesModal').classList.add('active');
+            $('profileSearch').value = '';
+            renderProfileGrid();
+            setTimeout(() => $('profileSearch').focus(), 100);
+        }
+
+        function closeProfilesModal() {
+            $('profilesModal').classList.remove('active');
+        }
+
+        $('profilesModal').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeProfilesModal();
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeProfilesModal();
+        });
+
+        // ============================================================
+        // FETCH POSTS
+        // ============================================================
+        async function fetchPosts() {
+            if (isFetching) return;
+            const url = pageUrl.value.trim();
+            const limit = parseInt(postCount.value);
+            if (!url) {
+                showToast('Please enter a Facebook URL', 'error');
+                return;
+            }
+
+            isFetching = true;
+            loadBtn.disabled = true;
+            loadBtn.textContent = 'Loading…';
+            loading.classList.add('active');
+            results.classList.remove('active');
+            results.innerHTML = '';
+
+            try {
+                const res = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ page_url: url, limit, force_refresh: true })
+                });
+                const data = await res.json();
+
+                loading.classList.remove('active');
+                loadBtn.disabled = false;
+                loadBtn.textContent = 'Load';
                 isFetching = false;
-                
+
                 if (data.success) {
                     currentPosts = data.posts;
-                    console.log('✅ Posts loaded:', currentPosts.length);
-                    console.log('📸 Images per post:', currentPosts.map(p => p.images ? p.images.length : 0));
-                    displayPosts(data);
+                    renderPosts(data.posts);
+                    showToast(`Loaded ${data.posts.length} posts`, 'success');
                 } else {
                     results.innerHTML = `
                         <div class="error">
-                            <h3>❌ Could not load posts</h3>
-                            <p>${data.error || 'Unknown error'}</p>
-                            <p style="margin-top:8px;font-size:12px;color:#888;">Try: nasa, bbcnews, or natgeo</p>
+                            <h3>Unable to load posts</h3>
+                            <p>${data.error || 'Please check the URL and try again.'}</p>
                         </div>
                     `;
+                    results.classList.add('active');
+                    showToast('Failed to load posts', 'error');
                 }
-            } catch (error) {
-                loading.style.display = 'none';
-                fetchBtn.disabled = false;
+            } catch (err) {
+                loading.classList.remove('active');
+                loadBtn.disabled = false;
+                loadBtn.textContent = 'Load';
                 isFetching = false;
                 results.innerHTML = `
                     <div class="error">
-                        <h3>❌ Connection error</h3>
-                        <p>${error.message}</p>
+                        <h3>Connection error</h3>
+                        <p>${err.message}</p>
                     </div>
                 `;
+                results.classList.add('active');
+                showToast('Connection error', 'error');
             }
         }
 
-        async function downloadSingleImage(imageUrl, filename) {
-            if (!imageUrl) {
-                showToast('❌ No image URL provided');
-                return;
-            }
+        // ============================================================
+        // RENDER POSTS
+        // ============================================================
+        function renderPosts(posts) {
+            const totalImages = posts.reduce((sum, p) => sum + (p.images || []).length, 0);
 
-            showToast('⏳ Downloading image...');
-            
-            try {
-                const response = await fetch('/api/download-single-image', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        image_url: imageUrl,
-                        filename: filename
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Download failed: ${response.status} - ${errorText}`);
-                }
-
-                // Get the image file
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                
-                // Get filename from content-disposition or generate one
-                const contentDisposition = response.headers.get('content-disposition');
-                let downloadFilename = `${filename}.jpg`;
-                if (contentDisposition) {
-                    const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-                    if (match && match[1]) {
-                        downloadFilename = match[1].replace(/['"]/g, '');
-                    }
-                }
-                
-                a.download = downloadFilename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                // Clean up
-                setTimeout(() => window.URL.revokeObjectURL(url), 1000);
-
-                showToast(`✅ Downloaded: ${downloadFilename}`);
-            } catch (error) {
-                console.error('❌ Download error:', error);
-                showToast(`❌ Download failed: ${error.message}`);
-            }
-        }
-
-        async function downloadAllImages() {
-            if (!currentPosts || currentPosts.length === 0) {
-                showToast('❌ No posts to download');
-                return;
-            }
-
-            // Count total images
-            const totalImages = currentPosts.reduce((sum, post) => sum + (post.images ? post.images.length : 0), 0);
-            
-            console.log('📥 Downloading:', totalImages, 'images');
-            console.log('📦 Posts:', currentPosts);
-            
-            if (totalImages === 0) {
-                showToast('❌ No images found in these posts');
-                return;
-            }
-
-            const downloadBtn = document.getElementById('downloadBtn');
-            if (!downloadBtn) {
-                showToast('❌ Download button not found');
-                return;
-            }
-            
-            downloadBtn.disabled = true;
-            downloadBtn.innerHTML = '⏳ Downloading...';
-
-            try {
-                // Get page name from URL
-                const pageUrl = document.getElementById('pageUrl').value.trim();
-                const pageName = pageUrl.replace(/^https?:\/\/(www\.)?facebook\.com\//, '').replace(/[^a-zA-Z0-9]/g, '_') || 'facebook';
-
-                const response = await fetch('/api/download-images', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        posts: currentPosts,
-                        page_name: pageName
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Download failed: ${response.status} - ${errorText}`);
-                }
-
-                // Get the ZIP file
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                
-                // Get filename from content-disposition or generate one
-                const contentDisposition = response.headers.get('content-disposition');
-                let filename = `${pageName}_images.zip`;
-                if (contentDisposition) {
-                    const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-                    if (match && match[1]) {
-                        filename = match[1].replace(/['"]/g, '');
-                    }
-                }
-                
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                // Clean up
-                setTimeout(() => window.URL.revokeObjectURL(url), 1000);
-
-                showToast(`✅ Downloaded ${totalImages} images!`);
-            } catch (error) {
-                console.error('❌ Download error:', error);
-                showToast(`❌ Download failed: ${error.message}`);
-            } finally {
-                downloadBtn.disabled = false;
-                downloadBtn.innerHTML = `📥 Download All Images <span class="badge">${totalImages}</span>`;
-            }
-        }
-
-        function copyToClipboard(text) {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast('✅ Copied to clipboard!');
-                }).catch(() => {
-                    fallbackCopy(text);
-                });
-            } else {
-                fallbackCopy(text);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const input = document.createElement('input');
-            input.value = text;
-            document.body.appendChild(input);
-            input.select();
-            try {
-                document.execCommand('copy');
-                showToast('✅ Copied to clipboard!');
-            } catch (e) {
-                showToast('❌ Failed to copy');
-            }
-            document.body.removeChild(input);
-        }
-
-        function displayPosts(data) {
-            const results = document.getElementById('results');
-            const { posts, cached } = data;
-            
-            // Count total images
-            const totalImages = posts.reduce((sum, post) => sum + (post.images ? post.images.length : 0), 0);
-            
             let html = `
                 <div class="stats">
-                    <span>📊 ${posts.length} posts</span>
-                    <span>🖼️ ${totalImages} images</span>
-                    ${cached ? '<span class="cached">📦 Cached</span>' : ''}
-                    <span class="download-section">
-                        <button class="btn btn-download" id="downloadBtn" onclick="downloadAllImages()" ${totalImages === 0 ? 'disabled' : ''}>
-                            📥 Download All Images <span class="badge">${totalImages}</span>
-                        </button>
-                    </span>
+                    <span class="stat-item"><strong>${posts.length}</strong> posts</span>
+                    <span class="stat-item"><strong>${totalImages}</strong> images</span>
+                    <span class="stat-badge latest">Latest</span>
+                    <span class="spacer"></span>
+                    <button class="download-all" onclick="downloadAllImages()" ${totalImages === 0 ? 'disabled' : ''}>
+                        ⬇ Download All
+                        <span class="count">${totalImages}</span>
+                    </button>
                 </div>
             `;
-            
-            if (!posts || posts.length === 0) {
-                html += `<div class="error"><h3>📭 No posts found</h3></div>`;
-                results.innerHTML = html;
-                return;
-            }
-            
-            posts.forEach((post, index) => {
+
+            posts.forEach((post, i) => {
                 const images = post.images || [];
-                const imageCount = images.length;
-                const postNumber = index + 1;
-                
-                // Build image grid
-                let imagesHtml = '';
-                if (imageCount === 0) {
-                    imagesHtml = `<div class="no-image">📷 No images</div>`;
-                } else if (imageCount === 1) {
-                    imagesHtml = `
-                        <div class="images">
-                            <img src="${images[0]}" alt="Post image" class="single-image" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>❌ Image failed to load</div>'">
+                const count = images.length;
+                const num = i + 1;
+
+                // Images
+                let imgHtml = '';
+                if (count === 0) {
+                    imgHtml = `<div class="no-image">No images</div>`;
+                } else if (count === 1) {
+                    imgHtml = `
+                        <div class="post-images">
+                            <img src="${images[0]}" alt="Post image" class="single" loading="lazy"
+                                 onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Image failed to load</div>'">
                         </div>
                     `;
-                } else if (imageCount === 2) {
-                    imagesHtml = `
-                        <div class="images">
+                } else if (count === 2) {
+                    imgHtml = `
+                        <div class="post-images">
                             <div class="grid-2">
-                                ${images.map(img => `<img src="${img}" alt="Post image" loading="lazy" onerror="this.style.display='none'">`).join('')}
+                                ${images.map(img => `<img src="${img}" loading="lazy" onerror="this.style.display='none'">`).join('')}
                             </div>
                         </div>
                     `;
                 } else {
-                    imagesHtml = `
-                        <div class="images">
+                    imgHtml = `
+                        <div class="post-images">
                             <div class="grid-3">
-                                ${images.map(img => `<img src="${img}" alt="Post image" loading="lazy" onerror="this.style.display='none'">`).join('')}
+                                ${images.map(img => `<img src="${img}" loading="lazy" onerror="this.style.display='none'">`).join('')}
                             </div>
                         </div>
                     `;
                 }
-                
-                // Build image links with download buttons
+
+                // Image links
                 let linksHtml = '';
-                if (imageCount > 0) {
+                if (count > 0) {
                     linksHtml = `
                         <div class="image-links">
-                            <div class="label">🖼️ Image URLs (${imageCount})</div>
-                            ${images.map((img, idx) => {
-                                const imgNumber = idx + 1;
-                                const filename = `post_${postNumber}_image_${imgNumber}`;
-                                return `
-                                    <div class="link-item">
-                                        <span class="url">${img}</span>
-                                        <span class="actions">
-                                            <button onclick="downloadSingleImage('${img}', '${filename}')" title="Download this image" class="download-btn">⬇️ Download</button>
-                                            <button onclick="copyToClipboard('${img}')" title="Copy URL">📋</button>
-                                            <button onclick="window.open('${img}', '_blank')" title="Open in new tab">🔗</button>
-                                        </span>
-                                    </div>
-                                `;
-                            }).join('')}
+                            <div class="label">${count} image${count > 1 ? 's' : ''}</div>
+                            ${images.map((img, idx) => `
+                                <div class="link-item">
+                                    <span class="url">${img}</span>
+                                    <span class="actions">
+                                        <button onclick="downloadSingleImage('${img}', 'post_${num}_img_${idx+1}')" class="download-btn">Download</button>
+                                        <button onclick="copyToClipboard('${img}')" title="Copy URL">📋</button>
+                                        <button onclick="window.open('${img}', '_blank')" title="Open">🔗</button>
+                                    </span>
+                                </div>
+                            `).join('')}
                         </div>
                     `;
                 }
-                
+
+                // Time display BEFORE caption - easier tracking
+                const timeHtml = post.time ? `
+                    <div class="post-time">
+                        <span class="absolute">${post.time} <span class="tz">EAT</span></span>
+                        ${post.relative_time ? `<span class="relative">• ${post.relative_time}</span>` : ''}
+                    </div>
+                ` : '';
+
                 html += `
-                    <div class="post-card" id="post-${index}">
-                        <div class="caption">
-                            <span class="post-number">Post ${postNumber}</span>
-                            ${post.text || 'No caption'}
-                            <span class="time">${post.time || ''}</span>
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-top">
+                                <span class="post-number ${num === 1 ? 'recent' : ''}">#${num}</span>
+                                ${timeHtml}
+                            </div>
+                            <div class="post-text">${post.text || ''}</div>
                         </div>
-                        ${imagesHtml}
+                        ${imgHtml}
                         ${linksHtml}
                         <div class="post-footer">
-                            <span>❤️ ${post.total_reactions || 0}</span>
+                            <span>❤️ <span class="reaction">${post.total_reactions || 0}</span></span>
                             <span>💬 ${post.comments || 0}</span>
                             <span>🔄 ${post.shares || 0}</span>
-                            <span>📎 ${imageCount} image${imageCount !== 1 ? 's' : ''}</span>
+                            <span>📎 ${count} image${count !== 1 ? 's' : ''}</span>
                         </div>
                     </div>
                 `;
             });
-            
+
             results.innerHTML = html;
+            results.classList.add('active');
         }
 
-        function setPage(url) {
-            document.getElementById('pageUrl').value = url;
-            fetchPosts(false);
+        // ============================================================
+        // DOWNLOAD FUNCTIONS
+        // ============================================================
+        async function downloadSingleImage(url, name) {
+            showToast('Downloading…', '');
+            try {
+                const res = await fetch('/api/download-single-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image_url: url, filename: name })
+                });
+                if (!res.ok) throw new Error('Download failed');
+                const blob = await res.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                const cd = res.headers.get('content-disposition');
+                a.download = cd ? cd.match(/filename=(.+)/)?.[1]?.replace(/["']/g, '') || name + '.jpg' : name + '.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+                showToast('Downloaded ✓', 'success');
+            } catch (e) {
+                showToast('Download failed: ' + e.message, 'error');
+            }
         }
 
-        // Auto-load on start
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => fetchPosts(false), 400);
+        async function downloadAllImages() {
+            if (!currentPosts.length) {
+                showToast('No posts to download', 'error');
+                return;
+            }
+            const total = currentPosts.reduce((s, p) => s + (p.images || []).length, 0);
+            if (!total) {
+                showToast('No images found', 'error');
+                return;
+            }
+
+            const btn = document.querySelector('.download-all');
+            btn.disabled = true;
+            btn.textContent = '⏳ Downloading…';
+
+            try {
+                const name = pageUrl.value.replace(/^https?:\/\/(www\.)?facebook\.com\//, '').replace(/[^a-z0-9]/gi, '_') || 'facebook';
+                const res = await fetch('/api/download-images', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ posts: currentPosts, page_name: name })
+                });
+                if (!res.ok) throw new Error('Download failed');
+                const blob = await res.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                const cd = res.headers.get('content-disposition');
+                a.download = cd ? cd.match(/filename=(.+)/)?.[1]?.replace(/["']/g, '') || name + '.zip' : name + '.zip';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+                showToast(`Downloaded ${total} images ✓`, 'success');
+            } catch (e) {
+                showToast('Download failed: ' + e.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `⬇ Download All <span class="count">${total}</span>`;
+            }
+        }
+
+        // ============================================================
+        // UTILITY
+        // ============================================================
+        function copyToClipboard(text) {
+            if (navigator.clipboard?.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast('Copied ✓', 'success'));
+            } else {
+                const el = document.createElement('textarea');
+                el.value = text;
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                showToast('Copied ✓', 'success');
+            }
+        }
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        pageUrl.addEventListener('keydown', e => { if (e.key === 'Enter') fetchPosts(); });
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') fetchPosts();
         });
 
-        // Enter key support
-        document.getElementById('pageUrl').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') fetchPosts(false);
-        });
+        // ============================================================
+        // INIT
+        // ============================================================
+        loadProfiles();
+
+        // Auto-load default on first visit
+        setTimeout(() => {
+            if (!pageUrl.value) {
+                pageUrl.value = 'https://www.facebook.com/bbcnews';
+                fetchPosts();
+            }
+        }, 500);
     </script>
 </body>
 </html>
