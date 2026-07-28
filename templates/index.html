@@ -1582,17 +1582,21 @@
         // ============================================================
         pageUrl.addEventListener('keydown', e => { if (e.key === 'Enter') fetchPosts(); });
 
-        // ============================================================
-        // INIT
-        // ============================================================
-        loadProfiles();
 
-        setTimeout(() => {
-            if (!pageUrl.value) {
-                pageUrl.value = 'https://www.facebook.com/bbcnews';
-                fetchPosts();
-            }
-        }, 500);
+
+
+
+// ============================================================
+// INIT
+// ============================================================
+loadProfiles();
+
+// No auto-load - user must click "Load" button
+
+
+
+
+
     </script>
 </body>
 </html>
