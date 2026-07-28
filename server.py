@@ -9,9 +9,16 @@ import zipfile
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
 import mimetypes
-import pytz
 import threading
 import time
+
+# Try to import pytz, fallback to timezone handling without it
+try:
+    import pytz
+    HAS_PYTZ = True
+except ImportError:
+    HAS_PYTZ = False
+    print("⚠️ pytz not installed, using fallback timezone handling")
 
 app = Flask(__name__)
 CORS(app)
@@ -23,8 +30,18 @@ API_TOKEN = "5ae60cb46979c92bc6454e41ff94ab44a6ffb2d9fca6f4c7afa30fcaf7d05a47"
 CACHE_FILE = "posts_cache.json"
 SPECIAL_PROFILES_FILE = "special_profiles.json"
 
-# Timezone
-TIMEZONE = pytz.timezone('Africa/Nairobi')
+# ============================================================
+# TIMEZONE HANDLING - Fallback if pytz not available
+# ============================================================
+if HAS_PYTZ:
+    TIMEZONE = pytz.timezone('Africa/Nairobi')
+else:
+    # Manual UTC+3 offset for Nairobi (EAT)
+    TIMEZONE_OFFSET = timedelta(hours=3)
+    
+    def get_eat_time():
+        """Get current time in EAT (UTC+3)"""
+        return datetime.utcnow() + TIMEZONE_OFFSET
 
 # ============================================================
 # KEEP ALIVE - Prevents server from sleeping
@@ -136,7 +153,10 @@ def parse_time_to_datetime(time_str):
             if 'T' in str(time_str):
                 clean_time = str(time_str).replace('Z', '+00:00')
                 dt = datetime.fromisoformat(clean_time)
-                return dt.replace(tzinfo=pytz.UTC)
+                if HAS_PYTZ:
+                    return dt.replace(tzinfo=pytz.UTC)
+                else:
+                    return dt
     except Exception as e:
         print(f"Parse error: {e}")
     return None
@@ -148,8 +168,14 @@ def format_time_eat(time_str):
             if 'T' in str(time_str):
                 clean_time = str(time_str).replace('Z', '+00:00')
                 dt = datetime.fromisoformat(clean_time)
-                dt_utc = dt.replace(tzinfo=pytz.UTC)
-                dt_eat = dt_utc.astimezone(TIMEZONE)
+                
+                if HAS_PYTZ:
+                    dt_utc = dt.replace(tzinfo=pytz.UTC)
+                    dt_eat = dt_utc.astimezone(TIMEZONE)
+                else:
+                    # Manual UTC+3 offset
+                    dt_eat = dt + TIMEZONE_OFFSET
+                
                 return dt_eat.strftime("%I:%M %p EAT")
             else:
                 return time_str
@@ -165,10 +191,15 @@ def get_relative_time(time_str):
             if 'T' in str(time_str):
                 clean_time = str(time_str).replace('Z', '+00:00')
                 dt = datetime.fromisoformat(clean_time)
-                dt_utc = dt.replace(tzinfo=pytz.UTC)
-                dt_eat = dt_utc.astimezone(TIMEZONE)
                 
-                now = datetime.now(TIMEZONE)
+                if HAS_PYTZ:
+                    dt_utc = dt.replace(tzinfo=pytz.UTC)
+                    dt_eat = dt_utc.astimezone(TIMEZONE)
+                    now = datetime.now(TIMEZONE)
+                else:
+                    dt_eat = dt + TIMEZONE_OFFSET
+                    now = datetime.utcnow() + TIMEZONE_OFFSET
+                
                 diff = now - dt_eat
                 
                 seconds = diff.total_seconds()
@@ -626,7 +657,14 @@ def download_images():
         summary += f"Posts processed: {len(posts)}\n"
         summary += f"Images downloaded: {image_count}\n"
         summary += f"Failed downloads: {failed_count}\n"
-        summary += f"Download Date: {datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y')}\n"
+        
+        # Get current EAT time
+        if HAS_PYTZ:
+            now_str = datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y')
+        else:
+            now_str = (datetime.utcnow() + TIMEZONE_OFFSET).strftime('%I:%M %p EAT - %B %d, %Y')
+        
+        summary += f"Download Date: {now_str}\n"
         summary += "=" * 60 + "\n\n"
         
         zip_file.writestr("summary.txt", summary)
@@ -654,9 +692,15 @@ def clear_cache():
 @app.route('/health')
 def health():
     """Health check endpoint for keep-alive"""
+    # Get current EAT time
+    if HAS_PYTZ:
+        now_str = datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y')
+    else:
+        now_str = (datetime.utcnow() + TIMEZONE_OFFSET).strftime('%I:%M %p EAT - %B %d, %Y')
+    
     return jsonify({
         "status": "healthy",
-        "timestamp": datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y'),
+        "timestamp": now_str,
         "version": "1.0.0",
         "uptime": "running"
     })
@@ -673,8 +717,15 @@ if __name__ == '__main__':
     # Production settings - no debug, no reloader
     print("🚀 Starting Facebook Post Viewer (Production Mode)")
     print("=" * 50)
+    
+    # Get current EAT time
+    if HAS_PYTZ:
+        now_str = datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y')
+    else:
+        now_str = (datetime.utcnow() + TIMEZONE_OFFSET).strftime('%I:%M %p EAT - %B %d, %Y')
+    
     print(f"⏰ Timezone: East Africa Time (EAT) - Nairobi, Kenya")
-    print(f"📅 Current EAT: {datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y')}")
+    print(f"📅 Current EAT: {now_str}")
     print(f"🔌 Port: {port}")
     print("💓 Keep-alive: Enabled (pings every 30 seconds)")
     print("📰 Showing newest posts first (most recent at top)")
