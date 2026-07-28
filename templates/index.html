@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook Post Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PostView</title>
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -17,7 +17,7 @@
             background: #f5f6f8;
             color: #1a1a2e;
             min-height: 100vh;
-            padding: 24px;
+            padding: 12px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -30,10 +30,10 @@
         /* ===== HEADER ===== */
         .header {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 28px 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            border-radius: 14px;
+            padding: 16px 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
         
@@ -42,30 +42,30 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px;
         }
         
         .header-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
         .header-brand .logo {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             background: linear-gradient(135deg, #1877f2, #0d65d9);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
         }
         
         .header-brand h1 {
-            font-size: 20px;
+            font-size: 17px;
             font-weight: 700;
             color: #1a1a2e;
             letter-spacing: -0.3px;
@@ -78,53 +78,53 @@
         .header-meta {
             display: flex;
             align-items: center;
-            gap: 16px;
-            font-size: 13px;
+            gap: 8px;
+            font-size: 11px;
             color: #6b7280;
         }
         
         .header-meta .badge {
             background: #eef2f7;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 500;
             color: #4b5563;
         }
         
         .header-meta .time-display {
             color: #6b7280;
-            font-size: 12px;
+            font-size: 10px;
         }
         
         /* ===== CONTROLS ===== */
         .controls {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 20px 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
         
         .controls-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px;
             align-items: center;
         }
         
         .controls-row .url-field {
             flex: 1;
-            min-width: 200px;
+            min-width: 140px;
         }
         
         .controls-row .url-field input {
             width: 100%;
-            padding: 10px 16px;
+            padding: 8px 12px;
             border: 1.5px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-family: inherit;
             color: #1a1a2e;
             background: #fafbfc;
@@ -138,53 +138,45 @@
             box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
         }
         
-        .controls-row .url-field input::placeholder {
-            color: #9ca3af;
-        }
-        
         .controls-row select {
-            padding: 10px 16px;
+            padding: 8px 12px;
             border: 1.5px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-family: inherit;
             color: #1a1a2e;
             background: #fafbfc;
             outline: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            min-width: 110px;
+            min-width: 85px;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
-        }
-        
-        .controls-row select:focus {
-            border-color: #1877f2;
-            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+            background-position: right 10px center;
+            padding-right: 30px;
         }
         
         .controls-row .btn-group {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 6px;
+            flex: 1;
         }
         
         .btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
             font-family: inherit;
             cursor: pointer;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 4px;
             white-space: nowrap;
+            flex: 1;
         }
         
         .btn-primary {
@@ -194,15 +186,11 @@
         
         .btn-primary:hover {
             background: #0d65d9;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
         }
         
         .btn-primary:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
         
         .btn-secondary {
@@ -218,13 +206,14 @@
         .selected-profile {
             display: none;
             background: #f0f7ff;
-            border-radius: 10px;
-            padding: 10px 16px;
-            margin-top: 14px;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 10px;
             border: 1px solid rgba(24, 119, 242, 0.15);
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
+            font-size: 12px;
         }
         
         .selected-profile.active {
@@ -232,7 +221,6 @@
         }
         
         .selected-profile .label {
-            font-size: 12px;
             color: #6b7280;
             font-weight: 500;
         }
@@ -240,40 +228,39 @@
         .selected-profile .name {
             font-weight: 600;
             color: #1877f2;
-            font-size: 14px;
         }
         
         .selected-profile .url {
-            font-size: 12px;
             color: #6b7280;
             word-break: break-all;
+            font-size: 11px;
         }
         
         /* ===== SPECIAL PROFILES ===== */
         .special-section {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
         
         .special-section .section-label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .special-section .section-label .dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background: #f59e0b;
             border-radius: 50%;
             display: inline-block;
@@ -282,25 +269,25 @@
         .special-profiles {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 5px;
         }
         
         .special-profile-btn {
-            padding: 6px 16px;
+            padding: 4px 12px 4px 12px;
             background: #fef9e7;
             border: 1.5px solid #fde68a;
-            border-radius: 20px;
-            font-size: 13px;
+            border-radius: 16px;
+            font-size: 12px;
             font-weight: 500;
             color: #92400e;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
+            white-space: nowrap;
         }
         
         .special-profile-btn:hover {
             background: #fde68a;
-            transform: translateY(-1px);
         }
         
         .special-profile-btn.active {
@@ -314,8 +301,8 @@
             border: none;
             color: #92400e;
             cursor: pointer;
-            font-size: 16px;
-            padding: 0 4px;
+            font-size: 14px;
+            padding: 0 2px;
             opacity: 0.5;
             transition: opacity 0.2s;
             font-family: inherit;
@@ -330,21 +317,22 @@
         .quick-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 20px;
+            gap: 5px;
+            margin-bottom: 12px;
         }
         
         .quick-link {
-            padding: 5px 14px;
+            padding: 4px 12px;
             background: #f3f4f6;
             border: none;
-            border-radius: 16px;
-            font-size: 12px;
+            border-radius: 14px;
+            font-size: 11px;
             font-weight: 500;
             color: #4b5563;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
+            white-space: nowrap;
         }
         
         .quick-link:hover {
@@ -360,7 +348,7 @@
         .loading {
             display: none;
             text-align: center;
-            padding: 60px 0;
+            padding: 40px 0;
         }
         
         .loading.active {
@@ -368,13 +356,13 @@
         }
         
         .loading .spinner {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             border: 3px solid #e5e7eb;
             border-top-color: #1877f2;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin: 0 auto 14px;
+            margin: 0 auto 12px;
         }
         
         @keyframes spin {
@@ -383,7 +371,7 @@
         
         .loading p {
             color: #6b7280;
-            font-size: 14px;
+            font-size: 13px;
         }
         
         /* ===== RESULTS ===== */
@@ -400,17 +388,17 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 12px 20px;
-            padding: 14px 20px;
+            gap: 8px 12px;
+            padding: 10px 14px;
             background: #ffffff;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
         
         .stats .stat-item {
-            font-size: 13px;
+            font-size: 12px;
             color: #4b5563;
         }
         
@@ -421,9 +409,9 @@
         
         .stats .stat-badge {
             background: #eef2f7;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 10px;
             font-weight: 500;
             color: #4b5563;
         }
@@ -435,80 +423,70 @@
         
         .stats .spacer {
             flex: 1;
+            display: none;
         }
         
         .stats .download-all {
             background: #059669;
             color: white;
             border: none;
-            padding: 8px 18px;
+            padding: 6px 14px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
+            margin-left: auto;
         }
         
         .stats .download-all:hover {
             background: #047857;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
         
         .stats .download-all:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
         
         .stats .download-all .count {
             background: rgba(255,255,255,0.2);
-            padding: 0 8px;
-            border-radius: 10px;
-            font-size: 11px;
+            padding: 0 6px;
+            border-radius: 8px;
+            font-size: 10px;
         }
         
         /* ===== POST CARD ===== */
         .post-card {
             background: #ffffff;
-            border-radius: 16px;
-            margin-bottom: 20px;
+            border-radius: 14px;
+            margin-bottom: 14px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
             border: 1px solid rgba(0, 0, 0, 0.04);
-            transition: box-shadow 0.2s ease;
-        }
-        
-        .post-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         
         .post-card .post-header {
-            padding: 18px 22px 12px 22px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            padding: 12px 14px 8px 14px;
         }
         
         .post-card .post-top {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
         
         .post-card .post-number {
             background: #f3f4f6;
             color: #6b7280;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            padding: 2px 10px;
-            border-radius: 12px;
+            padding: 1px 8px;
+            border-radius: 10px;
             white-space: nowrap;
             flex-shrink: 0;
         }
@@ -521,9 +499,9 @@
         .post-card .post-time {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            font-size: 13px;
+            font-size: 11px;
         }
         
         .post-card .post-time .absolute {
@@ -532,9 +510,9 @@
         
         .post-card .post-time .absolute .tz {
             background: #eef2f7;
-            padding: 0 6px;
-            border-radius: 4px;
-            font-size: 9px;
+            padding: 0 5px;
+            border-radius: 3px;
+            font-size: 8px;
             font-weight: 600;
             color: #4b5563;
             margin-left: 2px;
@@ -543,11 +521,12 @@
         .post-card .post-time .relative {
             color: #059669;
             font-weight: 500;
+            font-size: 11px;
         }
         
         .post-card .post-text {
-            font-size: 15px;
-            line-height: 1.7;
+            font-size: 14px;
+            line-height: 1.6;
             color: #1a1a2e;
             word-wrap: break-word;
             white-space: pre-wrap;
@@ -560,7 +539,7 @@
         
         /* ===== POST IMAGES ===== */
         .post-card .post-images {
-            padding: 0 4px 4px 4px;
+            padding: 0 3px 3px 3px;
         }
         
         .post-card .post-images img {
@@ -570,33 +549,33 @@
         }
         
         .post-card .post-images .single {
-            max-height: 520px;
+            max-height: 400px;
             object-fit: contain;
-            border-radius: 8px;
+            border-radius: 6px;
         }
         
         .post-card .post-images .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3px;
+            gap: 2px;
         }
         
         .post-card .post-images .grid-2 img {
             aspect-ratio: 1/1;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 4px;
         }
         
         .post-card .post-images .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 3px;
+            gap: 2px;
         }
         
         .post-card .post-images .grid-3 img {
             aspect-ratio: 1/1;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 4px;
         }
         
         .post-card .post-images .grid-3 img:first-child {
@@ -606,60 +585,57 @@
         }
         
         .post-card .no-image {
-            padding: 0 22px 14px 22px;
+            padding: 0 14px 10px 14px;
             color: #9ca3af;
-            font-size: 13px;
+            font-size: 12px;
         }
         
-        /* ===== IMAGE LINKS ===== */
+        /* ===== IMAGE LINKS - COMPACT ===== */
         .post-card .image-links {
-            padding: 12px 22px 8px 22px;
+            padding: 8px 14px 6px 14px;
             border-top: 1px solid #f3f4f6;
         }
         
         .post-card .image-links .label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: #6b7280;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
         }
         
         .post-card .image-links .link-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 5px 8px;
+            padding: 4px 6px;
             margin: 2px 0;
             background: #fafbfc;
-            border-radius: 6px;
-            gap: 8px;
-            flex-wrap: wrap;
+            border-radius: 4px;
+            gap: 6px;
+            flex-wrap: nowrap;
         }
         
         .post-card .image-links .link-item .url {
-            font-size: 11px;
-            color: #1877f2;
-            word-break: break-all;
-            font-family: 'SF Mono', 'Courier New', monospace;
-            flex: 1;
-            min-width: 100px;
+            display: none;
         }
         
         .post-card .image-links .link-item .actions {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             flex-shrink: 0;
+            width: 100%;
+            justify-content: flex-start;
         }
         
         .post-card .image-links .link-item .actions button {
             background: none;
             border: none;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px;
             transition: background 0.2s;
             font-family: inherit;
             color: #4b5563;
@@ -672,9 +648,9 @@
         .post-card .image-links .link-item .actions .download-btn {
             background: #8b5cf6;
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 500;
-            padding: 3px 12px;
+            padding: 2px 10px;
             border-radius: 4px;
         }
         
@@ -684,19 +660,19 @@
         
         /* ===== POST FOOTER ===== */
         .post-card .post-footer {
-            padding: 10px 22px 16px 22px;
+            padding: 8px 14px 12px 14px;
             border-top: 1px solid #f3f4f6;
             display: flex;
-            gap: 18px;
+            gap: 12px;
             flex-wrap: wrap;
-            font-size: 13px;
+            font-size: 12px;
             color: #6b7280;
         }
         
         .post-card .post-footer span {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
         
         .post-card .post-footer .reaction {
@@ -707,24 +683,21 @@
         /* ===== ERROR ===== */
         .error {
             text-align: center;
-            padding: 48px 24px;
+            padding: 30px 16px;
             background: #ffffff;
-            border-radius: 16px;
+            border-radius: 14px;
             border: 1px solid #fecaca;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
         }
         
         .error h3 {
             color: #dc2626;
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 16px;
+            margin-bottom: 6px;
         }
         
         .error p {
             color: #6b7280;
-            font-size: 14px;
-            max-width: 400px;
-            margin: 0 auto;
+            font-size: 13px;
         }
         
         /* ===== MODAL ===== */
@@ -737,7 +710,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
         }
         
         .modal-overlay.active {
@@ -746,24 +719,23 @@
         
         .modal {
             background: #ffffff;
-            border-radius: 20px;
-            padding: 32px;
-            max-width: 680px;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 600px;
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
         
         .modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
         
         .modal-header h2 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #1a1a2e;
         }
@@ -771,60 +743,53 @@
         .modal-header .close {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
             color: #6b7280;
-            transition: color 0.2s;
             padding: 4px 8px;
             border-radius: 6px;
-            font-family: inherit;
         }
         
         .modal-header .close:hover {
-            color: #1a1a2e;
             background: #f3f4f6;
         }
         
         .modal .search-input {
             width: 100%;
-            padding: 10px 16px;
+            padding: 8px 12px;
             border: 1.5px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-family: inherit;
             outline: none;
-            transition: all 0.2s;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             background: #fafbfc;
         }
         
         .modal .search-input:focus {
             border-color: #1877f2;
             background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
         }
         
         .modal .profile-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            margin-bottom: 14px;
         }
         
         .modal .profile-item {
-            padding: 16px 12px;
+            padding: 12px 8px;
             background: #fafbfc;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
             border: 2px solid transparent;
-            font-family: inherit;
         }
         
         .modal .profile-item:hover {
             background: #f3f4f6;
-            transform: translateY(-2px);
         }
         
         .modal .profile-item.selected {
@@ -838,21 +803,21 @@
         }
         
         .modal .profile-item .name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #1a1a2e;
         }
         
         .modal .profile-item .category {
-            font-size: 12px;
+            font-size: 10px;
             color: #6b7280;
         }
         
         .modal .profile-item .special-tag {
-            font-size: 10px;
+            font-size: 9px;
             color: #d97706;
             font-weight: 600;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         
         .modal .modal-actions {
@@ -860,13 +825,13 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
-            padding-top: 16px;
+            gap: 8px;
+            padding-top: 12px;
             border-top: 1px solid #f3f4f6;
         }
         
         .modal .selected-info {
-            font-size: 13px;
+            font-size: 12px;
             color: #4b5563;
         }
         
@@ -876,60 +841,56 @@
         
         .modal .modal-actions .btn-group {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         
         /* ===== ADD PROFILE SECTION ===== */
         .add-profile-section {
-            margin-top: 16px;
-            padding: 16px;
+            margin-top: 12px;
+            padding: 12px;
             background: #fafbfc;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1.5px dashed #d1d5db;
         }
         
         .add-profile-section .title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: #4b5563;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .add-profile-section .form {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 6px;
         }
         
         .add-profile-section .form input {
             flex: 1;
-            min-width: 120px;
-            padding: 8px 14px;
+            min-width: 80px;
+            padding: 6px 10px;
             border: 1.5px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 13px;
+            border-radius: 6px;
+            font-size: 12px;
             font-family: inherit;
             outline: none;
             background: #ffffff;
-            transition: all 0.2s;
         }
         
         .add-profile-section .form input:focus {
             border-color: #1877f2;
-            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
         }
         
         .add-profile-section .form .btn-add {
             background: #059669;
             color: white;
             border: none;
-            padding: 8px 18px;
-            border-radius: 8px;
+            padding: 6px 14px;
+            border-radius: 6px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
         }
         
         .add-profile-section .form .btn-add:hover {
@@ -939,21 +900,22 @@
         /* ===== TOAST ===== */
         .toast {
             position: fixed;
-            bottom: 24px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: #1a1a2e;
             color: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 13px;
             font-weight: 500;
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
             z-index: 2000;
+            max-width: 90%;
+            text-align: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            font-family: inherit;
         }
         
         .toast.show {
@@ -971,50 +933,53 @@
         
         /* ===== RESPONSIVE ===== */
         @media (max-width: 640px) {
-            body { padding: 12px; }
+            body { padding: 8px; }
             
-            .header { padding: 20px; }
-            .header-brand h1 { font-size: 17px; }
-            .header-meta { font-size: 11px; }
+            .header { padding: 12px 14px; }
+            .header-brand h1 { font-size: 15px; }
             .header-meta .badge { display: none; }
             
-            .controls { padding: 16px; }
+            .controls { padding: 12px; }
             .controls-row { flex-direction: column; }
             .controls-row .url-field { width: 100%; }
             .controls-row .btn-group { width: 100%; }
-            .controls-row .btn-group .btn { flex: 1; justify-content: center; }
+            .controls-row .btn-group .btn { flex: 1; justify-content: center; font-size: 12px; padding: 8px 12px; }
             
-            .modal { padding: 20px; }
-            .modal .profile-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .special-section { padding: 10px 12px; }
+            .special-profile-btn { font-size: 11px; padding: 3px 10px; }
             
-            .stats { flex-direction: column; align-items: stretch; }
-            .stats .spacer { display: none; }
-            .stats .download-all { justify-content: center; }
+            .quick-link { font-size: 10px; padding: 3px 10px; }
             
-            .post-card .post-header { padding: 14px 16px 10px 16px; }
-            .post-card .post-text { font-size: 14px; }
-            .post-card .image-links { padding: 10px 16px 6px 16px; }
-            .post-card .post-footer { padding: 8px 16px 12px 16px; gap: 12px; font-size: 12px; }
-            .post-card .image-links .link-item { flex-direction: column; align-items: flex-start; }
-            .post-card .image-links .link-item .actions { width: 100%; justify-content: flex-start; }
+            .stats { padding: 8px 12px; gap: 6px; }
+            .stats .stat-item { font-size: 11px; }
+            .stats .download-all { font-size: 11px; padding: 5px 12px; }
             
-            .selected-profile { flex-direction: column; align-items: flex-start; }
+            .post-card .post-header { padding: 10px 12px 6px 12px; }
+            .post-card .post-text { font-size: 13px; }
+            .post-card .image-links { padding: 6px 12px 4px 12px; }
+            .post-card .post-footer { padding: 6px 12px 10px 12px; font-size: 11px; gap: 8px; }
             
-            .add-profile-section .form { flex-direction: column; }
-            .add-profile-section .form input { width: 100%; }
+            .modal { padding: 16px; }
+            .modal .profile-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+            
+            .toast { font-size: 12px; padding: 8px 16px; }
+            
+            .post-card .image-links .link-item .actions button { font-size: 11px; padding: 2px 6px; }
+            .post-card .image-links .link-item .actions .download-btn { font-size: 9px; padding: 2px 8px; }
         }
         
-        @media (max-width: 480px) {
-            .header { padding: 16px; }
-            .header-brand .logo { width: 30px; height: 30px; font-size: 14px; }
-            .header-brand h1 { font-size: 15px; }
+        @media (max-width: 400px) {
+            .header-brand h1 { font-size: 13px; }
+            .header-brand .logo { width: 26px; height: 26px; font-size: 12px; }
+            
+            .controls-row select { font-size: 12px; padding: 6px 10px; min-width: 70px; }
+            
+            .modal .profile-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+            .modal .profile-item .name { font-size: 11px; }
             
             .post-card .post-images .grid-2 { grid-template-columns: 1fr; }
             .post-card .post-images .grid-3 { grid-template-columns: 1fr; }
             .post-card .post-images .grid-3 img:first-child { grid-row: auto; }
-            
-            .post-card .post-top { flex-direction: column; align-items: flex-start; gap: 4px; }
-            .post-card .post-time { font-size: 12px; }
         }
     </style>
 </head>
@@ -1025,11 +990,11 @@
         <header class="header">
             <div class="header-top">
                 <div class="header-brand">
-                    <div class="logo">F</div>
+                    <div class="logo">P</div>
                     <h1>Post<span>View</span></h1>
                 </div>
                 <div class="header-meta">
-                    <span class="badge">⚡ Fresh</span>
+                    <span class="badge">⚡</span>
                     <span class="time-display" id="headerTime">—</span>
                 </div>
             </div>
@@ -1039,17 +1004,17 @@
         <div class="controls">
             <div class="controls-row">
                 <div class="url-field">
-                    <input type="text" id="pageUrl" placeholder="Enter Facebook page or profile URL…">
+                    <input type="text" id="pageUrl" placeholder="Enter Facebook URL…">
                 </div>
                 <select id="postCount">
-                    <option value="1">1 post</option>
-                    <option value="3" selected>3 posts</option>
-                    <option value="5">5 posts</option>
-                    <option value="9">9 posts</option>
+                    <option value="1">1</option>
+                    <option value="3" selected>3</option>
+                    <option value="5">5</option>
+                    <option value="9">9</option>
                 </select>
                 <div class="btn-group">
                     <button class="btn btn-primary" id="loadBtn" onclick="fetchPosts()">Load</button>
-                    <button class="btn btn-secondary" onclick="openProfilesModal()">Profiles</button>
+                    <button class="btn btn-secondary" onclick="openProfilesModal()">📋</button>
                 </div>
             </div>
 
@@ -1064,11 +1029,10 @@
         <!-- ===== SPECIAL PROFILES ===== -->
         <div class="special-section" id="specialSection">
             <div class="section-label">
-                <span class="dot"></span>
-                Saved Profiles
+                <span class="dot"></span> Saved
             </div>
             <div class="special-profiles" id="specialProfiles">
-                <span style="font-size:13px;color:#9ca3af;">No saved profiles yet. Click "Profiles" to add.</span>
+                <span style="font-size:12px;color:#9ca3af;">Add profiles via Profiles button</span>
             </div>
         </div>
 
@@ -1078,7 +1042,7 @@
         <!-- ===== LOADING ===== -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Fetching posts…</p>
+            <p>Loading posts…</p>
         </div>
 
         <!-- ===== RESULTS ===== -->
@@ -1090,27 +1054,27 @@
     <div class="modal-overlay" id="profilesModal">
         <div class="modal">
             <div class="modal-header">
-                <h2>Select Profile</h2>
+                <h2>Profiles</h2>
                 <button class="close" onclick="closeProfilesModal()">✕</button>
             </div>
-            <input type="text" class="search-input" id="profileSearch" placeholder="Search profiles…" oninput="filterProfiles()">
+            <input type="text" class="search-input" id="profileSearch" placeholder="Search…" oninput="filterProfiles()">
             <div class="profile-grid" id="profileGrid"></div>
 
             <!-- Add Profile -->
             <div class="add-profile-section">
-                <div class="title">➕ Add saved profile</div>
+                <div class="title">➕ Add profile</div>
                 <div class="form">
-                    <input type="text" id="newProfileName" placeholder="Name (e.g. John Doe)">
-                    <input type="text" id="newProfileUrl" placeholder="Facebook URL">
+                    <input type="text" id="newProfileName" placeholder="Name">
+                    <input type="text" id="newProfileUrl" placeholder="URL">
                     <button class="btn-add" onclick="addSpecialProfile()">Add</button>
                 </div>
             </div>
 
             <div class="modal-actions">
-                <span class="selected-info" id="selectedCount">No profile selected</span>
+                <span class="selected-info" id="selectedCount">No profile</span>
                 <div class="btn-group">
                     <button class="btn btn-secondary" onclick="closeProfilesModal()">Close</button>
-                    <button class="btn btn-primary" onclick="selectAndClose()">Select &amp; Close</button>
+                    <button class="btn btn-primary" onclick="selectAndClose()">Select</button>
                 </div>
             </div>
         </div>
@@ -1157,8 +1121,7 @@
             const now = new Date();
             const opts = { timeZone: 'Africa/Nairobi', hour: '2-digit', minute: '2-digit', hour12: true };
             const time = now.toLocaleTimeString('en-US', opts);
-            const date = now.toLocaleDateString('en-US', { timeZone: 'Africa/Nairobi', month: 'short', day: 'numeric', year: 'numeric' });
-            $('headerTime').textContent = time + ' EAT · ' + date;
+            $('headerTime').textContent = time + ' EAT';
         }
         updateHeaderTime();
         setInterval(updateHeaderTime, 30000);
@@ -1186,7 +1149,7 @@
         function renderSpecialProfiles() {
             const container = $('specialProfiles');
             if (!specialProfiles.length) {
-                container.innerHTML = '<span style="font-size:13px;color:#9ca3af;">No saved profiles yet. Click "Profiles" to add.</span>';
+                container.innerHTML = '<span style="font-size:12px;color:#9ca3af;">Add profiles via Profiles button</span>';
                 return;
             }
             container.innerHTML = specialProfiles.map(p => `
@@ -1225,7 +1188,7 @@
                          onclick="selectAndSetProfile('${p.id}')">
                         <div class="name">${p.name}</div>
                         <div class="category">${p.category}</div>
-                        ${isSpecial ? '<div class="special-tag">⭐ Saved</div>' : ''}
+                        ${isSpecial ? '<div class="special-tag">⭐</div>' : ''}
                     </div>
                 `;
             }).join('');
@@ -1261,8 +1224,8 @@
 
         function updateSelectedCount() {
             $('selectedCount').textContent = selectedProfile
-                ? `✅ ${selectedProfile.name} selected`
-                : 'No profile selected';
+                ? `✅ ${selectedProfile.name}`
+                : 'No profile';
         }
 
         function selectAndClose() {
@@ -1270,7 +1233,7 @@
                 closeProfilesModal();
                 showToast(`Selected: ${selectedProfile.name}`, 'success');
             } else {
-                showToast('Please select a profile first', 'error');
+                showToast('Select a profile first', 'error');
             }
         }
 
@@ -1281,7 +1244,7 @@
             const name = $('newProfileName').value.trim();
             const url = $('newProfileUrl').value.trim();
             if (!name || !url) {
-                showToast('Please enter both name and URL', 'error');
+                showToast('Enter name and URL', 'error');
                 return;
             }
             try {
@@ -1297,7 +1260,7 @@
                     $('newProfileUrl').value = '';
                     await loadProfiles();
                 } else {
-                    showToast(data.error || 'Failed to add', 'error');
+                    showToast(data.error || 'Failed', 'error');
                 }
             } catch (e) {
                 showToast('Error: ' + e.message, 'error');
@@ -1305,7 +1268,7 @@
         }
 
         async function removeSpecialProfile(id) {
-            if (!confirm('Remove this saved profile?')) return;
+            if (!confirm('Remove this profile?')) return;
             try {
                 const res = await fetch(`/api/special-profiles/${id}`, { method: 'DELETE' });
                 const data = await res.json();
@@ -1315,7 +1278,7 @@
                         pageUrl.value = '';
                     }
                     await loadProfiles();
-                    showToast('Profile removed', 'success');
+                    showToast('Removed', 'success');
                 }
             } catch (e) {
                 showToast('Error: ' + e.message, 'error');
@@ -1352,13 +1315,13 @@
             const url = pageUrl.value.trim();
             const limit = parseInt(postCount.value);
             if (!url) {
-                showToast('Please enter a Facebook URL', 'error');
+                showToast('Enter a Facebook URL', 'error');
                 return;
             }
 
             isFetching = true;
             loadBtn.disabled = true;
-            loadBtn.textContent = 'Loading…';
+            loadBtn.textContent = '…';
             loading.classList.add('active');
             results.classList.remove('active');
             results.innerHTML = '';
@@ -1383,12 +1346,12 @@
                 } else {
                     results.innerHTML = `
                         <div class="error">
-                            <h3>Unable to load posts</h3>
-                            <p>${data.error || 'Please check the URL and try again.'}</p>
+                            <h3>Unable to load</h3>
+                            <p>${data.error || 'Check URL and try again.'}</p>
                         </div>
                     `;
                     results.classList.add('active');
-                    showToast('Failed to load posts', 'error');
+                    showToast('Failed to load', 'error');
                 }
             } catch (err) {
                 loading.classList.remove('active');
@@ -1414,13 +1377,11 @@
 
             let html = `
                 <div class="stats">
-                    <span class="stat-item"><strong>${posts.length}</strong> posts</span>
-                    <span class="stat-item"><strong>${totalImages}</strong> images</span>
+                    <span class="stat-item"><strong>${posts.length}</strong></span>
+                    <span class="stat-item"><strong>${totalImages}</strong> 📷</span>
                     <span class="stat-badge latest">Latest</span>
-                    <span class="spacer"></span>
                     <button class="download-all" onclick="downloadAllImages()" ${totalImages === 0 ? 'disabled' : ''}>
-                        ⬇ Download All
-                        <span class="count">${totalImages}</span>
+                        ⬇ <span class="count">${totalImages}</span>
                     </button>
                 </div>
             `;
@@ -1438,7 +1399,7 @@
                     imgHtml = `
                         <div class="post-images">
                             <img src="${images[0]}" alt="Post image" class="single" loading="lazy"
-                                 onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Image failed to load</div>'">
+                                 onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Failed</div>'">
                         </div>
                     `;
                 } else if (count === 2) {
@@ -1459,7 +1420,7 @@
                     `;
                 }
 
-                // Image links
+                // Image links - compact
                 let linksHtml = '';
                 if (count > 0) {
                     linksHtml = `
@@ -1467,19 +1428,18 @@
                             <div class="label">${count} image${count > 1 ? 's' : ''}</div>
                             ${images.map((img, idx) => `
                                 <div class="link-item">
-                                    <span class="url">${img}</span>
-                                    <span class="actions">
-                                        <button onclick="downloadSingleImage('${img}', 'post_${num}_img_${idx+1}')" class="download-btn">Download</button>
+                                    <div class="actions">
+                                        <button onclick="downloadSingleImage('${img}', 'post_${num}_img_${idx+1}')" class="download-btn">⬇</button>
                                         <button onclick="copyToClipboard('${img}')" title="Copy URL">📋</button>
                                         <button onclick="window.open('${img}', '_blank')" title="Open">🔗</button>
-                                    </span>
+                                    </div>
                                 </div>
                             `).join('')}
                         </div>
                     `;
                 }
 
-                // Time display BEFORE caption - easier tracking
+                // Time
                 const timeHtml = post.time ? `
                     <div class="post-time">
                         <span class="absolute">${post.time} <span class="tz">EAT</span></span>
@@ -1502,7 +1462,7 @@
                             <span>❤️ <span class="reaction">${post.total_reactions || 0}</span></span>
                             <span>💬 ${post.comments || 0}</span>
                             <span>🔄 ${post.shares || 0}</span>
-                            <span>📎 ${count} image${count !== 1 ? 's' : ''}</span>
+                            <span>📎 ${count}</span>
                         </div>
                     </div>
                 `;
@@ -1535,24 +1495,24 @@
                 setTimeout(() => URL.revokeObjectURL(a.href), 1000);
                 showToast('Downloaded ✓', 'success');
             } catch (e) {
-                showToast('Download failed: ' + e.message, 'error');
+                showToast('Failed: ' + e.message, 'error');
             }
         }
 
         async function downloadAllImages() {
             if (!currentPosts.length) {
-                showToast('No posts to download', 'error');
+                showToast('No posts', 'error');
                 return;
             }
             const total = currentPosts.reduce((s, p) => s + (p.images || []).length, 0);
             if (!total) {
-                showToast('No images found', 'error');
+                showToast('No images', 'error');
                 return;
             }
 
             const btn = document.querySelector('.download-all');
             btn.disabled = true;
-            btn.textContent = '⏳ Downloading…';
+            btn.textContent = '…';
 
             try {
                 const name = pageUrl.value.replace(/^https?:\/\/(www\.)?facebook\.com\//, '').replace(/[^a-z0-9]/gi, '_') || 'facebook';
@@ -1571,12 +1531,12 @@
                 a.click();
                 document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-                showToast(`Downloaded ${total} images ✓`, 'success');
+                showToast(`Downloaded ${total} ✓`, 'success');
             } catch (e) {
-                showToast('Download failed: ' + e.message, 'error');
+                showToast('Failed: ' + e.message, 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `⬇ Download All <span class="count">${total}</span>`;
+                btn.innerHTML = `⬇ <span class="count">${total}</span>`;
             }
         }
 
@@ -1601,16 +1561,12 @@
         // KEYBOARD SHORTCUTS
         // ============================================================
         pageUrl.addEventListener('keydown', e => { if (e.key === 'Enter') fetchPosts(); });
-        document.addEventListener('keydown', e => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') fetchPosts();
-        });
 
         // ============================================================
         // INIT
         // ============================================================
         loadProfiles();
 
-        // Auto-load default on first visit
         setTimeout(() => {
             if (!pageUrl.value) {
                 pageUrl.value = 'https://www.facebook.com/bbcnews';
