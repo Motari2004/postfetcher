@@ -10,6 +10,8 @@ from datetime import datetime, timedelta
 from urllib.parse import urlparse
 import mimetypes
 import pytz
+import threading
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -24,11 +26,46 @@ SPECIAL_PROFILES_FILE = "special_profiles.json"
 # Timezone
 TIMEZONE = pytz.timezone('Africa/Nairobi')
 
+# ============================================================
+# KEEP ALIVE - Prevents server from sleeping
+# ============================================================
+class KeepAlive:
+    def __init__(self):
+        self.running = True
+    
+    def start(self):
+        """Start keep-alive thread"""
+        def keep_alive():
+            while self.running:
+                try:
+                    # Ping the health endpoint every 30 seconds
+                    time.sleep(30)
+                    with app.test_client() as client:
+                        response = client.get('/health')
+                        if response.status_code == 200:
+                            print(f"💓 Keep-alive ping at {datetime.now().strftime('%I:%M:%S %p EAT')}")
+                except Exception as e:
+                    print(f"⚠️ Keep-alive error: {e}")
+        
+        thread = threading.Thread(target=keep_alive, daemon=True)
+        thread.start()
+        print("✅ Keep-alive thread started (pings every 30 seconds)")
+    
+    def stop(self):
+        """Stop keep-alive thread"""
+        self.running = False
+
+# Start keep-alive
+keep_alive = KeepAlive()
+keep_alive.start()
+
+# ============================================================
 # Default special profiles - NO ICONS
+# ============================================================
 DEFAULT_SPECIAL_PROFILES = [
     {
         "id": "profile61590243822144",
-        "name": "Billionaire Vision",
+        "name": "My Profile",
         "url": "https://www.facebook.com/profile.php?id=61590243822144",
         "category": "Special"
     },
@@ -616,20 +653,38 @@ def clear_cache():
 
 @app.route('/health')
 def health():
+    """Health check endpoint for keep-alive"""
     return jsonify({
         "status": "healthy",
         "timestamp": datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y'),
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "uptime": "running"
     })
+
+@app.route('/ping')
+def ping():
+    """Simple ping endpoint"""
+    return "pong"
 
 if __name__ == '__main__':
     import os
     port = int(os.environ.get('PORT', 5000))
-    print("🚀 Starting Facebook Post Viewer")
+    
+    # Production settings - no debug, no reloader
+    print("🚀 Starting Facebook Post Viewer (Production Mode)")
     print("=" * 50)
     print(f"⏰ Timezone: East Africa Time (EAT) - Nairobi, Kenya")
     print(f"📅 Current EAT: {datetime.now().astimezone(TIMEZONE).strftime('%I:%M %p EAT - %B %d, %Y')}")
+    print(f"🔌 Port: {port}")
+    print("💓 Keep-alive: Enabled (pings every 30 seconds)")
     print("📰 Showing newest posts first (most recent at top)")
-    print("💬 With relative time (e.g., '2h ago')")
     print("=" * 50)
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    
+    # Run with production settings
+    app.run(
+        debug=False,           # Disable debug mode
+        host='0.0.0.0',        # Listen on all interfaces
+        port=port,
+        threaded=True,         # Enable threading
+        use_reloader=False     # Disable auto-reloader
+    )
