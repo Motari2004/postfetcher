@@ -26,7 +26,6 @@
             margin: 0 auto;
         }
         
-        /* ===== HEADER ===== */
         .header {
             background: #ffffff;
             border-radius: 14px;
@@ -96,7 +95,6 @@
             font-size: 10px;
         }
         
-        /* ===== CONTROLS ===== */
         .controls {
             background: #ffffff;
             border-radius: 14px;
@@ -201,7 +199,6 @@
             background: #e5e7eb;
         }
         
-        /* ===== SELECTED PROFILE ===== */
         .selected-profile {
             display: none;
             background: #f0f7ff;
@@ -235,7 +232,6 @@
             font-size: 10px;
         }
         
-        /* ===== SPECIAL PROFILES ===== */
         .special-section {
             background: #ffffff;
             border-radius: 14px;
@@ -312,7 +308,6 @@
             opacity: 1;
         }
         
-        /* ===== QUICK LINKS ===== */
         .quick-links {
             display: flex;
             flex-wrap: wrap;
@@ -343,7 +338,6 @@
             color: white;
         }
         
-        /* ===== LOADING ===== */
         .loading {
             display: none;
             text-align: center;
@@ -373,7 +367,6 @@
             font-size: 12px;
         }
         
-        /* ===== RESULTS ===== */
         .results {
             display: none;
         }
@@ -382,7 +375,6 @@
             display: block;
         }
         
-        /* ===== STATS BAR ===== */
         .stats {
             display: flex;
             flex-wrap: wrap;
@@ -458,7 +450,6 @@
             font-size: 9px;
         }
         
-        /* ===== POST CARD ===== */
         .post-card {
             background: #ffffff;
             border-radius: 14px;
@@ -530,13 +521,32 @@
             word-wrap: break-word;
             white-space: pre-wrap;
             padding-top: 4px;
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
         }
         
         .post-card .post-text:empty {
             display: none;
         }
         
-        /* ===== POST IMAGES ===== */
+        .post-card .copy-caption-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            color: #6b7280;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .post-card .copy-caption-btn:hover {
+            background: #f3f4f6;
+        }
+        
         .post-card .post-images {
             padding: 0 3px 3px 3px;
         }
@@ -589,7 +599,6 @@
             font-size: 11px;
         }
         
-        /* ===== IMAGE LINKS - CLEAR BUTTONS ===== */
         .post-card .image-links {
             padding: 6px 12px 4px 12px;
             border-top: 1px solid #f3f4f6;
@@ -669,7 +678,6 @@
             background: #2563eb;
         }
         
-        /* ===== POST FOOTER ===== */
         .post-card .post-footer {
             padding: 6px 12px 10px 12px;
             border-top: 1px solid #f3f4f6;
@@ -691,7 +699,6 @@
             color: #1a1a2e;
         }
         
-        /* ===== ERROR ===== */
         .error {
             text-align: center;
             padding: 30px 16px;
@@ -711,7 +718,6 @@
             font-size: 12px;
         }
         
-        /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -855,7 +861,6 @@
             gap: 5px;
         }
         
-        /* ===== ADD PROFILE SECTION ===== */
         .add-profile-section {
             margin-top: 10px;
             padding: 10px;
@@ -908,7 +913,6 @@
             background: #047857;
         }
         
-        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -942,69 +946,48 @@
             background: #dc2626;
         }
         
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 640px) {
             body { padding: 6px; }
-            
             .header { padding: 10px 12px; }
             .header-brand h1 { font-size: 14px; }
             .header-meta .badge { display: none; }
-            
             .controls { padding: 10px; }
             .controls-row { flex-direction: column; }
             .controls-row .url-field { width: 100%; }
             .controls-row .btn-group { width: 100%; }
             .controls-row .btn-group .btn { flex: 1; justify-content: center; font-size: 12px; padding: 7px 10px; }
-            
             .special-section { padding: 8px 10px; }
             .special-profile-btn { font-size: 10px; padding: 2px 8px; }
-            
             .quick-link { font-size: 9px; padding: 2px 8px; }
-            
             .stats { padding: 6px 10px; gap: 4px; }
             .stats .stat-item { font-size: 10px; }
             .stats .download-all { font-size: 10px; padding: 4px 10px; }
-            
             .post-card .post-header { padding: 8px 10px 4px 10px; }
             .post-card .post-text { font-size: 12px; }
             .post-card .image-links { padding: 4px 10px 2px 10px; }
             .post-card .post-footer { padding: 4px 10px 8px 10px; font-size: 10px; gap: 6px; }
-            
             .modal { padding: 14px; }
             .modal .profile-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
-            
             .toast { font-size: 11px; padding: 6px 14px; }
-            
-            .post-card .image-links .link-item .actions button {
-                padding: 3px 8px;
-                font-size: 9px;
-            }
+            .post-card .image-links .link-item .actions button { padding: 3px 8px; font-size: 9px; }
         }
         
         @media (max-width: 400px) {
             .header-brand h1 { font-size: 12px; }
             .header-brand .logo { width: 24px; height: 24px; font-size: 11px; }
-            
             .controls-row select { font-size: 11px; padding: 6px 8px; min-width: 45px; }
-            
             .modal .profile-grid { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); }
             .modal .profile-item .name { font-size: 10px; }
-            
             .post-card .post-images .grid-2 { grid-template-columns: 1fr; }
             .post-card .post-images .grid-3 { grid-template-columns: 1fr; }
             .post-card .post-images .grid-3 img:first-child { grid-row: auto; }
-            
-            .post-card .image-links .link-item .actions button {
-                padding: 2px 6px;
-                font-size: 8px;
-            }
+            .post-card .image-links .link-item .actions button { padding: 2px 6px; font-size: 8px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
 
-        <!-- ===== HEADER ===== -->
         <header class="header">
             <div class="header-top">
                 <div class="header-brand">
@@ -1018,7 +1001,6 @@
             </div>
         </header>
 
-        <!-- ===== CONTROLS ===== -->
         <div class="controls">
             <div class="controls-row">
                 <div class="url-field">
@@ -1035,7 +1017,6 @@
                 </div>
             </div>
 
-            <!-- Selected Profile -->
             <div class="selected-profile" id="selectedDisplay">
                 <span class="label">Selected:</span>
                 <span class="name" id="selectedName">—</span>
@@ -1043,7 +1024,6 @@
             </div>
         </div>
 
-        <!-- ===== SPECIAL PROFILES ===== -->
         <div class="special-section" id="specialSection">
             <div class="section-label">
                 <span class="dot"></span> Saved Profiles
@@ -1053,21 +1033,17 @@
             </div>
         </div>
 
-        <!-- ===== QUICK LINKS ===== -->
         <div class="quick-links" id="quickLinks"></div>
 
-        <!-- ===== LOADING ===== -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p>Loading posts…</p>
         </div>
 
-        <!-- ===== RESULTS ===== -->
         <div class="results" id="results"></div>
 
     </div>
 
-    <!-- ===== PROFILES MODAL ===== -->
     <div class="modal-overlay" id="profilesModal">
         <div class="modal">
             <div class="modal-header">
@@ -1077,7 +1053,6 @@
             <input type="text" class="search-input" id="profileSearch" placeholder="Search profiles…" oninput="filterProfiles()">
             <div class="profile-grid" id="profileGrid"></div>
 
-            <!-- Add Profile -->
             <div class="add-profile-section">
                 <div class="title">➕ Add saved profile</div>
                 <div class="form">
@@ -1097,7 +1072,6 @@
         </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
     <script>
@@ -1408,7 +1382,6 @@
                 const count = images.length;
                 const num = i + 1;
 
-                // Images
                 let imgHtml = '';
                 if (count === 0) {
                     imgHtml = `<div class="no-image">No images</div>`;
@@ -1437,10 +1410,6 @@
                     `;
                 }
 
-
-
-
-                // Image links - clear buttons
                 let linksHtml = '';
                 if (count > 0) {
                     linksHtml = `
@@ -1459,7 +1428,6 @@
                     `;
                 }
 
-                // Time
                 const timeHtml = post.time ? `
                     <div class="post-time">
                         <span class="absolute">${post.time} <span class="tz">EAT</span></span>
@@ -1467,6 +1435,7 @@
                     </div>
                 ` : '';
 
+                // FIXED: Proper caption copy with encodeURIComponent
                 html += `
                     <div class="post-card">
                         <div class="post-header">
@@ -1474,7 +1443,10 @@
                                 <span class="post-number ${num === 1 ? 'recent' : ''}">#${num}</span>
                                 ${timeHtml}
                             </div>
-                            <div class="post-text">${post.text || ''}</div>
+                            <div class="post-text">
+                                ${post.text || ''}
+                                ${post.text ? `<button onclick="copyCaption('${encodeURIComponent(post.text)}')" class="copy-caption-btn" title="Copy caption">📋</button>` : ''}
+                            </div>
                         </div>
                         ${imgHtml}
                         ${linksHtml}
@@ -1498,17 +1470,20 @@
         async function downloadSingleImage(url, name) {
             showToast('Downloading…', '');
             try {
+                const timestamp = new Date().getTime();
+                const uniqueName = `${name}_${timestamp}`;
+                
                 const res = await fetch('/api/download-single-image', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image_url: url, filename: name })
+                    body: JSON.stringify({ image_url: url, filename: uniqueName })
                 });
                 if (!res.ok) throw new Error('Download failed');
                 const blob = await res.blob();
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
                 const cd = res.headers.get('content-disposition');
-                a.download = cd ? cd.match(/filename=(.+)/)?.[1]?.replace(/["']/g, '') || name + '.jpg' : name + '.jpg';
+                a.download = cd ? cd.match(/filename=(.+)/)?.[1]?.replace(/["']/g, '') || uniqueName + '.jpg' : uniqueName + '.jpg';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -1561,20 +1536,36 @@
         }
 
         // ============================================================
-        // UTILITY
+        // COPY FUNCTIONS - FIXED
         // ============================================================
         function copyToClipboard(text) {
+            const decodedText = text.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+            
             if (navigator.clipboard?.writeText) {
-                navigator.clipboard.writeText(text).then(() => showToast('Copied ✓', 'success'));
+                navigator.clipboard.writeText(decodedText).then(() => showToast('Copied ✓', 'success'))
+                .catch(() => fallbackCopy(decodedText));
             } else {
-                const el = document.createElement('textarea');
-                el.value = text;
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
-                showToast('Copied ✓', 'success');
+                fallbackCopy(decodedText);
             }
+        }
+
+        function copyCaption(encodedText) {
+            const text = decodeURIComponent(encodedText);
+            copyToClipboard(text);
+        }
+
+        function fallbackCopy(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            try {
+                document.execCommand('copy');
+                showToast('Copied ✓', 'success');
+            } catch (e) {
+                showToast('Failed to copy', 'error');
+            }
+            document.body.removeChild(el);
         }
 
         // ============================================================
@@ -1582,21 +1573,10 @@
         // ============================================================
         pageUrl.addEventListener('keydown', e => { if (e.key === 'Enter') fetchPosts(); });
 
-
-
-
-
-// ============================================================
-// INIT
-// ============================================================
-loadProfiles();
-
-// No auto-load - user must click "Load" button
-
-
-
-
-
+        // ============================================================
+        // INIT
+        // ============================================================
+        loadProfiles();
     </script>
 </body>
 </html>
